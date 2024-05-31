@@ -24,25 +24,28 @@
 
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
             android:text="@string/terminos_condiciones_texto"
             android:textColor="@android:color/black" />
     </ScrollView>
 
     <CheckBox
         android:id="@+id/checkbox_terminos"
-        android:layout_width="wrap_content"
+        android:layout_width="379dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:minHeight="48dp"
         android:text="@string/aceptar_terminos" />
 
     <CheckBox
+        android:layout_marginBottom="10dp"
         android:id="@+id/checkbox_notificaciones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,22 +54,25 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="60dp"
+        android:layout_marginBottom="80dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:layout_marginTop="16dp">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_no_acepto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_acepto"
-            android:layout_marginEnd="16dp" />
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/custom_button"
+            android:text="@string/no_acepto" />
 
         <Button
             android:id="@+id/btn_confirmar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:background="@drawable/custom_button"
             android:text="@string/confirmar" />
     </LinearLayout>
 </LinearLayout>

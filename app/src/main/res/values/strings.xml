@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Proyecto_Sisvita-G11</string>
+    <string name="encabezado">SISVITA</string>
     <string name="logo_description">Logo de Sisvita</string>
     <string name="complete_sus_datos">Complete sus datos</string>
     <string name="correo_institucional">Correo Institucional</string>
@@ -12,7 +13,7 @@
     <string name="atras">Atrás</string>
     <string name="continuar">Continuar</string>
     <string name="terminos_y_condiciones">Términos y condiciones del test</string>
-    <string name="terminos_condiciones_texto">Al realizar este test psicológico, reconoces y aceptas que los resultados proporcionados son únicamente para fines de entretenimiento y autoconocimiento...</string>
+    <string name="terminos_condiciones_texto">Al realizar este test psicológico, reconoces y aceptas que los resultados proporcionados son únicamente para fines de entretenimiento y autoconocimiento, y no deben ser considerados como un diagnóstico profesional. Todos los datos recopilados son estrictamente confidenciales y no serán compartidos con terceros sin tu consentimiento expreso, a menos que así lo exija la ley. Es importante destacar que este test no sustituye la opinión de un profesional de la salud mental debidamente calificado. Se requiere que tengas al menos 18 años de edad para participar en esta evaluación. Al iniciar el test, otorgas tu consentimiento informado para participar voluntariamente y comprendes que los resultados obtenidos son responsabilidad tuya y que los creadores del test no serán responsables por cualquier daño, pérdida o lesión que pueda surgir del uso o interpretación de los resultados del test.</string>
     <string name="aceptar_terminos">Aceptar términos de privacidad y condiciones</string>
     <string name="aceptar_notificaciones">Acepta que te mandemos notificaciones para realizar brindar el apoyo</string>
     <string name="no_acepto">No acepto</string>

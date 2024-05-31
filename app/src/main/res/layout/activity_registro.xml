@@ -13,7 +13,18 @@
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/logo_description"
         android:src="@drawable/sisvita_logo"
-        tools:ignore="ImageContrastCheck" />
+        tools:ignore="ImageContrastCheck"   />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/encabezado"
+        android:textSize="24sp"
+        android:textColor="@android:color/holo_blue_light"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp" />
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +33,7 @@
         android:textSize="24sp"
         android:textColor="@android:color/black"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="20dp" />
 
     <EditText
         android:id="@+id/email"
@@ -90,22 +101,24 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="70dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:layout_marginTop="16dp">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_atras"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/atras"
-            android:layout_marginEnd="16dp" />
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/custom_button"
+            android:text="@string/atras" />
 
         <Button
             android:id="@+id/btn_continuar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:background="@drawable/custom_button"
             android:text="@string/continuar" />
     </LinearLayout>
 </LinearLayout>
