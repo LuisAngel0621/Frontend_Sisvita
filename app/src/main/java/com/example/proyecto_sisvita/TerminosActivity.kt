@@ -1,5 +1,6 @@
 package com.example.proyecto_sisvita
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
@@ -26,6 +27,8 @@ class TerminosActivity : AppCompatActivity() {
             if (checkboxTerminos.isChecked) {
                 // Proceder con las acciones deseadas
                 Toast.makeText(this, "Terminos aceptados", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, iniciartestActivity::class.java)
+                startActivity(intent)
             } else {
                 Toast.makeText(this, "Debe aceptar los términos para continuar", Toast.LENGTH_SHORT).show()
             }

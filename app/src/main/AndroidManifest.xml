@@ -40,6 +40,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".CompletarDatosActivity"/>
         <activity android:name=".TerminosActivity"/>
+        <activity android:name=".iniciartestActivity"/>
+        <activity android:name=".escogertestActivity"/>
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
