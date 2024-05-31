@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="SISVITA"
-        android:textColor="#2CB1A5" 
+        android:textColor="#2CB1A5"
         android:textSize="39sp" />
     <TextView
         android:id="@+id/testTitle"
