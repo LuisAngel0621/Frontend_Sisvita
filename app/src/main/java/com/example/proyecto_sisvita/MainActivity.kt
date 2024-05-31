@@ -20,7 +20,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnRealizarTest.setOnClickListener {
-            // Acción para realizar el test
+            val intent = Intent(this, CompletarDatosActivity::class.java)
+            startActivity(intent)
         }
+
     }
 }

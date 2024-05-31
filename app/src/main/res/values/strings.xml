@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Proyecto_Sisvita-G11</string>
+    <string name="logo_description">Logo de Sisvita</string>
+    <string name="complete_sus_datos">Complete sus datos</string>
+    <string name="correo_institucional">Correo Institucional</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellidos">Apellidos</string>
+    <string name="edad">Edad</string>
+    <string name="sexo">Sexo</string>
+    <string name="estado_civil">Estado Civil</string>
+    <string name="ocupacion">Ocupación</string>
+    <string name="atras">Atrás</string>
+    <string name="continuar">Continuar</string>
+    <string name="terminos_y_condiciones">Términos y condiciones del test</string>
+    <string name="terminos_condiciones_texto">Al realizar este test psicológico, reconoces y aceptas que los resultados proporcionados son únicamente para fines de entretenimiento y autoconocimiento...</string>
+    <string name="aceptar_terminos">Aceptar términos de privacidad y condiciones</string>
+    <string name="aceptar_notificaciones">Acepta que te mandemos notificaciones para realizar brindar el apoyo</string>
+    <string name="no_acepto">No acepto</string>
+    <string name="confirmar">Confirmar</string>
 </resources>

@@ -38,6 +38,8 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".LoginActivity" />
+        <activity android:name=".CompletarDatosActivity"/>
+        <activity android:name=".TerminosActivity"/>
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
