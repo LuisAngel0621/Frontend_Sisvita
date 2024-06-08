@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
@@ -63,7 +64,6 @@ fun RegistroScreen() {
     var sexo by remember { mutableStateOf("") }
     var estadoCivil by remember { mutableStateOf("") }
     var ocupacion by remember { mutableStateOf("") }
-
     val context = LocalContext.current
 
     val allFieldsFilled = correo.isNotBlank() && nombre.isNotBlank() && apellidos.isNotBlank() &&
@@ -176,6 +176,14 @@ fun CustomDropdownMenu(value: String, onValueChange: (String) -> Unit, label: St
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegistroScreenPreview() {
+    ProyectoSISVITATheme {
+        RegistroScreen()
     }
 }
 
