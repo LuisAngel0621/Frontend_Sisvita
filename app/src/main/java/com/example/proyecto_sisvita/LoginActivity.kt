@@ -54,7 +54,7 @@ fun LoginScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFB3E5FC)),
+            .background(Color(0xFFB3E5FC)).padding(vertical = 5.dp, horizontal = 30.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

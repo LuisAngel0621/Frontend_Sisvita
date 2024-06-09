@@ -58,8 +58,7 @@ fun TerminosScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFB3E5FC)), // Background color similar to the image
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(Color(0xFFB3E5FC)).padding(bottom = 100.dp) // Background color similar to the image
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -67,20 +66,20 @@ fun TerminosScreen() {
         Image(
             painter = painterResource(id = R.drawable.sisvita_logo),
             contentDescription = null,
-            modifier = Modifier.size(100.dp).padding(bottom = 16.dp)
+            modifier = Modifier.size(100.dp).align(alignment = Alignment.CenterHorizontally)
+
         )
 
         Text(
             text = "Terminos y condiciones del test",
             fontSize = 24.sp,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 20.dp).align(alignment = Alignment.CenterHorizontally)
         )
 
         Box(
-            modifier = Modifier
+            modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp)
                 .background(Color(0xFFF5EDAD), shape = RoundedCornerShape(8.dp))
-                .padding(16.dp)
-                .fillMaxWidth()
+                .padding(30.dp)
                 .weight(1f),
             contentAlignment = Alignment.Center
         ) {
@@ -93,21 +92,22 @@ fun TerminosScreen() {
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.padding(vertical = 5.dp, horizontal = 15.dp)) {
             Checkbox(checked = aceptarTerminos, onCheckedChange = { setAceptarTerminos(it) })
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Aceptar terminos de privacidad y condiciones")
+            Text("Aceptar terminos de privacidad y condiciones", fontSize = 15.sp)
         }
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 5.dp, horizontal = 15.dp)) {
             Checkbox(checked = aceptarNotificaciones, onCheckedChange = { setAceptarNotificaciones(it) })
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Aceptas que te mandemos notificaciones para realizar brindar el apoyo")
+            Text("Aceptas que te mandemos notificaciones para realizar brindar el apoyo", fontSize = 15.sp)
+
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -124,11 +124,11 @@ fun TerminosScreen() {
 
             Button(
                 onClick = {
-                    if (aceptarTerminos && aceptarNotificaciones) {
+                    if (aceptarTerminos) {
                         context.startActivity(Intent(context, IniciarTestActivity::class.java))
                     }
                 },
-                enabled = aceptarTerminos && aceptarNotificaciones
+                enabled = aceptarTerminos
             ) {
                 Text("Confirmar")
             }
