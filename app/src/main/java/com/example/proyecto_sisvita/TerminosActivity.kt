@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,21 +37,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_sisvita.data.model.Paciente
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
+import com.example.proyecto_sisvita.viewmodel.PacientesViewModel
 
-class TerminosActivity : ComponentActivity() {
+class TerminosActivity() : ComponentActivity() {
+
+    val viewModel by viewModels<PacientesViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val nombre = intent.getStringExtra("nombre") ?: ""
+        val apellidos = intent.getStringExtra("apellidos") ?: ""
+        val correo = intent.getStringExtra("correo") ?: ""
+        val edad = intent.getStringExtra("edad") ?: ""
+        val sexo = intent.getStringExtra("sexo") ?: ""
+        val estadocivil = intent.getStringExtra("estadocivil") ?: ""
+        val ocupacion = intent.getStringExtra("ocupacion") ?: ""
+
         setContent {
             ProyectoSISVITATheme {
-                TerminosScreen()
+                TerminosScreen(nombres = nombre,
+                    apellidos = apellidos,
+                    correo = correo,
+                    edad = edad,
+                    sexo = sexo,
+                    estadocivil = estadocivil,
+                    ocupacion = ocupacion,
+                    viewModel = viewModel)
             }
         }
     }
 }
 
 @Composable
-fun TerminosScreen() {
+fun TerminosScreen(nombres: String,apellidos: String,correo: String,edad: String,sexo: String,estadocivil: String,ocupacion: String, viewModel: PacientesViewModel) {
     val context = LocalContext.current
     val (aceptarTerminos, setAceptarTerminos) = remember { mutableStateOf(false) }
     val (aceptarNotificaciones, setAceptarNotificaciones) = remember { mutableStateOf(false) }
@@ -125,6 +146,18 @@ fun TerminosScreen() {
             Button(
                 onClick = {
                     if (aceptarTerminos) {
+                        viewModel.addPaciente(
+
+                            Paciente(
+                                nombres = nombres,
+                                apellidos = apellidos,
+                                correoinstitucional = correo,
+                                edad = edad.toInt(),
+                                sexo = sexo,
+                                estadocivil = estadocivil,
+                                ocupacion = ocupacion
+                            )
+                        )
                         context.startActivity(Intent(context, IniciarTestActivity::class.java))
                     }
                 },
@@ -138,8 +171,26 @@ fun TerminosScreen() {
 
 @Preview(showBackground = true)
 @Composable
-fun TerminosActivityScreenPreview() {
+fun TerminosActivityScreenPreview(
+    nombre: String,
+    apellidos: String,
+    correo: String,
+    edad: String,
+    sexo: String,
+    estadocivil: String,
+    ocupacion: String,
+    viewModel: PacientesViewModel
+) {
     ProyectoSISVITATheme {
-        TerminosScreen()
+        TerminosScreen(
+            nombres = nombre,
+            apellidos = apellidos,
+            correo = correo,
+            edad = edad,
+            sexo = sexo,
+            estadocivil = estadocivil,
+            ocupacion = ocupacion,
+            viewModel = viewModel
+        )
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,8 +47,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
+import com.example.proyecto_sisvita.viewmodel.PacientesViewModel
 
 class RegistroActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -68,7 +71,6 @@ fun RegistroScreen() {
     var estadoCivil by remember { mutableStateOf("") }
     var ocupacion by remember { mutableStateOf("") }
     val context = LocalContext.current
-
     val allFieldsFilled = correo.isNotBlank() && nombre.isNotBlank() && apellidos.isNotBlank() &&
             edad.isNotBlank() && sexo.isNotBlank() && estadoCivil.isNotBlank() && ocupacion.isNotBlank()
 
@@ -128,7 +130,16 @@ fun RegistroScreen() {
             Button(
                 onClick = {
                     if (allFieldsFilled && isCorreoValid && isEdadValid) {
-                        context.startActivity(Intent(context, TerminosActivity::class.java))
+
+                        context.startActivity(Intent(context, TerminosActivity( )::class.java).apply {
+                            putExtra("nombre", nombre)
+                            putExtra("apellidos", apellidos)
+                            putExtra("correo", correo)
+                            putExtra("edad", edad)
+                            putExtra("sexo", sexo)
+                            putExtra("estadocivil", estadoCivil)
+                            putExtra("ocupacion", ocupacion)
+                        })
                     } else {
                         Toast.makeText(context, "Por favor, complete todos los campos correctamente.", Toast.LENGTH_LONG).show()
                     }
