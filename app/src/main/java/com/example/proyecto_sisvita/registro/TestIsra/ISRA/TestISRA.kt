@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,71 +44,62 @@ import androidx.lifecycle.ViewModel
 import com.example.proyecto_sisvita.MyApp
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.proyecto_sisvita.data.model.Preguntas
+import com.example.proyecto_sisvita.data.model.Respuestas
+import com.example.proyecto_sisvita.data.model.UsuarioTest
+import com.example.proyecto_sisvita.viewmodel.PacientesViewModel
+import com.example.proyecto_sisvita.viewmodel.QuestionViewModel
+import com.example.proyecto_sisvita.viewmodel.TestViewModel
 
 class TestISRA : ComponentActivity() {
+
+    val viewModel_question by viewModels<QuestionViewModel>()
+    val viewModel_test by viewModels<TestViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ProyectoSISVITATheme {
-                testIsra()
+                testIsra(viewModel_question = viewModel_question,viewModel_test = viewModel_test)
             }
         }
     }
 }
 
-data class Question(
-    val text: String,
-    val options: List<String> = listOf(
-        "Me preocupo fácilmente",//1
-        "Tengo pensamientos o pensamientos negativos sobre mi: inferioridad o torpeza",//2
-        "Me siento inseguro de mi mismo",//3
-        "Doy demasiadas vueltas a las cosas sin llegar a decidirme",//4
-        "Siento miedo",//5
-        "Me cuesta concentrarme",//6
-        "Pienso que la gente se dará cuenta de mis problemas o de la torpeza de mis actos"//7
-    )
-)
 
-class QuestionViewModel : ViewModel() {
-    val answers = mutableStateListOf<Answer>()
-}
-data class Answer(
-    val question: String,
-    var selectedOption: Int = -1,
-    var selectedScale: Int = -1
-)
+
+
 
 val questions  = listOf(
-    Question("¿Ante un examen importante o una entrevista de trabajo?"),
-    Question("¿Cuando voy a llegar tarde a una cita?"),
-    Question("¿Cuando pienso en todas las cosas que tengo que hacer?"),
-    Question("¿Al momento de tomar una decisión o resolver un problema difícil?"),
-    Question("¿En mi trabajo o cuando estudio?"),
-    Question("¿Cuando espero a alguien en un lugar concurrido?"),
-    Question("¿Si una persona está muy cerca mío o en una situación sexual íntima?"),
-    Question("¿Cuando alguien me molesta o cuando discuto?"),
-    Question("¿Cuando recibo algún tipo de observación/crítica/evaluación sobre mi trabajo?"),
-    Question("¿Si tengo que hablar en público?"),
-    Question("¿Cuando recuerdo situaciones en donde me sentí humillado, tímido o rechazado?"),
-    Question("¿Cuando tengo que viajar en avión o en barco?"),
-    Question("¿Después de haber cometido algún error?"),
-    Question("¿Ante la consulta del dentista, inyecciones, heridas o ver sangre?"),
-    Question("¿Cuando voy a una cita con una persona del otro sexo?"),
-    Question("¿Cuando pienso en mi futuro o en dificultades y problemas futuros?"),
-    Question("¿En medio de multitudes o espacios cerrados?"),
-    Question("¿Cuando tengo que asistir a una reunión social o conocer gente nueva?"),
-    Question("¿En lugares altos o ante aguas profundas?"),
-    Question("¿Al observar escenas violentas?"),
-    Question("¿Por nada en concreto?"),
-    Question("¿A la hora de dormir?"),
+    Preguntas("¿Ante un examen importante o una entrevista de trabajo?"),
+    Preguntas("¿Cuando voy a llegar tarde a una cita?"),
+    Preguntas("¿Cuando pienso en todas las cosas que tengo que hacer?"),
+    Preguntas("¿Al momento de tomar una decisión o resolver un problema difícil?"),
+    Preguntas("¿En mi trabajo o cuando estudio?"),
+    Preguntas("¿Cuando espero a alguien en un lugar concurrido?"),
+    Preguntas("¿Si una persona está muy cerca mío o en una situación sexual íntima?"),
+    Preguntas("¿Cuando alguien me molesta o cuando discuto?"),
+    Preguntas("¿Cuando recibo algún tipo de observación/crítica/evaluación sobre mi trabajo?"),
+    Preguntas("¿Si tengo que hablar en público?"),
+    Preguntas("¿Cuando recuerdo situaciones en donde me sentí humillado, tímido o rechazado?"),
+    Preguntas("¿Cuando tengo que viajar en avión o en barco?"),
+    Preguntas("¿Después de haber cometido algún error?"),
+    Preguntas("¿Ante la consulta del dentista, inyecciones, heridas o ver sangre?"),
+    Preguntas("¿Cuando voy a una cita con una persona del otro sexo?"),
+    Preguntas("¿Cuando pienso en mi futuro o en dificultades y problemas futuros?"),
+    Preguntas("¿En medio de multitudes o espacios cerrados?"),
+    Preguntas("¿Cuando tengo que asistir a una reunión social o conocer gente nueva?"),
+    Preguntas("¿En lugares altos o ante aguas profundas?"),
+    Preguntas("¿Al observar escenas violentas?"),
+    Preguntas("¿Por nada en concreto?"),
+    Preguntas("¿A la hora de dormir?"),
 )
 
-val answers = mutableStateListOf<Answer>()
+val answers = mutableStateListOf<Preguntas>()
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun testIsra(viewModel: QuestionViewModel = viewModel()) {
+fun testIsra(viewModel_question: QuestionViewModel ,viewModel_test: TestViewModel ) {
     val context = LocalContext.current
     Scaffold(
         topBar = {
@@ -141,13 +133,15 @@ fun testIsra(viewModel: QuestionViewModel = viewModel()) {
                         modifier = Modifier.weight(1f)
                     ) {
                         items(questions) { question ->
-                            QuestionItem(question,viewModel)
+                            QuestionItem(question,viewModel_question)
                             Divider()
                         }
                     }
 
                     Button(
-                        onClick = { context.startActivity(Intent(context, finISRA::class.java)) },
+                        onClick = {
+
+                            context.startActivity(Intent(context, finISRA::class.java)) },
                         modifier = Modifier.padding(top = 16.dp)
                     ) {
                         Text("Enviar respuestas")
@@ -159,7 +153,7 @@ fun testIsra(viewModel: QuestionViewModel = viewModel()) {
 }
 
 @Composable
-fun QuestionItem(question: Question, viewModel: QuestionViewModel) {
+fun QuestionItem(question: Preguntas, viewModel: QuestionViewModel) {
     var selectedOption by rememberSaveable { mutableStateOf(-1) }
     var selectedScale by rememberSaveable { mutableStateOf(-1) }
 
@@ -213,18 +207,9 @@ fun QuestionItem(question: Question, viewModel: QuestionViewModel) {
         }
     }
 }
-fun updateAnswer(question: String, selectedOption: Int, selectedScale: Int, viewModel: QuestionViewModel) {
-    val answer = Answer(question, selectedOption, selectedScale)
-    viewModel.answers.removeAll { it.question == question }
-    viewModel.answers.add(answer)
+fun updateAnswer(question: String, selectedOption: Int, selectedScale: Int, viewModel_question: QuestionViewModel) {
+    val answer = Respuestas(question, selectedOption, selectedScale)
+    viewModel_question.answers.removeAll { it.question == question }
+    viewModel_question.answers.add(answer)
 }
 
-@Preview(showBackground = true)
-@Composable
-fun testIsraPreview() {
-    ProyectoSISVITATheme {
-        MyApp {
-            testIsra()
-        }
-    }
-}

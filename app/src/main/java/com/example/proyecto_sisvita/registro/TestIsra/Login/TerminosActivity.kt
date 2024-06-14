@@ -148,6 +148,7 @@ fun TerminosScreen(nombres: String,apellidos: String,correo: String,edad: String
             Button(
                 onClick = {
                     if (aceptarTerminos) {
+
                         viewModel.addPaciente(
 
                             Paciente(
@@ -171,7 +172,7 @@ fun TerminosScreen(nombres: String,apellidos: String,correo: String,edad: String
     }
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 fun TerminosActivityScreenPreview(
     nombre: String,
