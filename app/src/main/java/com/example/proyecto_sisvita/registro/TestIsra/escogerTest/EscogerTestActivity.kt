@@ -1,5 +1,6 @@
-package com.example.proyecto_sisvita
+package com.example.proyecto_sisvita.registro.TestIsra.escogerTest
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_sisvita.R
+import com.example.proyecto_sisvita.registro.TestIsra.ISRA.InicioCognitivo
+import com.example.proyecto_sisvita.registro.TestIsra.ISRA.TestISRA
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 
 class EscogerTestActivity : ComponentActivity() {
@@ -50,7 +54,9 @@ fun EscogerTestScreen() {
         Image(
             painter = painterResource(id = R.drawable.sisvita_logo),
             contentDescription = null,
-            modifier = Modifier.size(200.dp).padding(bottom = 16.dp)
+            modifier = Modifier
+                .size(200.dp)
+                .padding(bottom = 16.dp)
         )
 
         Text(
@@ -61,7 +67,7 @@ fun EscogerTestScreen() {
         )
 
         Button(
-            onClick = { /* Handle ISRA */ },
+            onClick = {context.startActivity(Intent(context, InicioCognitivo::class.java))},
             modifier = Modifier.padding(vertical = 8.dp)
         ) {
             Text("ISRA")

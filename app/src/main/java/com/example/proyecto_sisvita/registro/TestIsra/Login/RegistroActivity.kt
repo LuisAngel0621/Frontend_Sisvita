@@ -1,12 +1,11 @@
 // RegistroActivity.kt
-package com.example.proyecto_sisvita
+package com.example.proyecto_sisvita.registro.TestIsra.Login
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,8 +45,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyecto_sisvita.R
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
-import com.example.proyecto_sisvita.viewmodel.PacientesViewModel
 
 class RegistroActivity : ComponentActivity() {
 

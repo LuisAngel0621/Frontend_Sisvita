@@ -1,5 +1,5 @@
 // MainActivity.kt
-package com.example.proyecto_sisvita
+package com.example.proyecto_sisvita.registro.TestIsra.Login
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -28,6 +28,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.proyecto_sisvita.MyApp
+import com.example.proyecto_sisvita.R
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 
 class MainActivity : ComponentActivity() {
@@ -42,7 +44,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun MainScreen(navController: NavHostController = rememberNavController()) {
     NavHost(navController = navController, startDestination = "main") {
@@ -51,7 +52,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         composable("login") { LoginScreen() }
     }
 }
-
 @Composable
 fun MainContent(navController: NavHostController) {
     Box(
