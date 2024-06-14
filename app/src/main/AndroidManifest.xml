@@ -19,7 +19,7 @@
         <activity android:name=".registro.TestIsra.escogerTest.EscogerTestActivity"/>
         <activity android:name=".registro.TestIsra.ISRA.TestISRA"/>
         <activity android:name=".registro.TestIsra.ISRA.InicioCognitivo"/>
-        <activity android:name=".registro.TestIsra.ISRA.finIsra"/>
+        <activity android:name=".registro.TestIsra.ISRA.finISRA"/>
         <activity android:name=".registro.TestIsra.Login.MainActivity"
 
             android:exported="true">

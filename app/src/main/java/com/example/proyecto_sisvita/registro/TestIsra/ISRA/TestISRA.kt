@@ -3,6 +3,7 @@
 package com.example.proyecto_sisvita.registro.TestIsra.ISRA
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -106,6 +108,7 @@ val answers = mutableStateListOf<Answer>()
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun testIsra(viewModel: QuestionViewModel = viewModel()) {
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -144,7 +147,7 @@ fun testIsra(viewModel: QuestionViewModel = viewModel()) {
                     }
 
                     Button(
-                        onClick = { /* Acción al enviar el cuestionario */ },
+                        onClick = { context.startActivity(Intent(context, finISRA::class.java)) },
                         modifier = Modifier.padding(top = 16.dp)
                     ) {
                         Text("Enviar respuestas")
