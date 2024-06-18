@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.R
+import com.example.proyecto_sisvita.registro.TestIsra.EspecialistaMenu.MenuRevisar
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 
 class LoginActivity : ComponentActivity() {
@@ -92,7 +93,7 @@ fun LoginScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { /* Handle login */ },
+            onClick = { context.startActivity(Intent(context, MenuRevisar::class.java)) },
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
         ) {
             Text("Iniciar sesión")

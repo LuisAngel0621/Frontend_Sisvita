@@ -1,4 +1,4 @@
-package com.example.proyecto_sisvita.registro.TestIsra.escogerTest
+package com.example.proyecto_sisvita.registro.TestIsra.RegistroYPrimerTest
 
 import android.content.Intent
 import android.os.Bundle
@@ -25,23 +25,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.R
-import com.example.proyecto_sisvita.registro.TestIsra.ISRA.InicioCognitivo
-import com.example.proyecto_sisvita.registro.TestIsra.ISRA.TestISRA
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 
-class EscogerTestActivity : ComponentActivity() {
+class IniciarTestActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ProyectoSISVITATheme {
-                EscogerTestScreen()
+                IniciarTestScreen()
             }
         }
     }
 }
 
 @Composable
-fun EscogerTestScreen() {
+fun IniciarTestScreen() {
     val context = LocalContext.current
 
     Column(
@@ -54,37 +52,21 @@ fun EscogerTestScreen() {
         Image(
             painter = painterResource(id = R.drawable.sisvita_logo),
             contentDescription = null,
-            modifier = Modifier
-                .size(200.dp)
-                .padding(bottom = 16.dp)
+            modifier = Modifier.size(200.dp).padding(bottom = 16.dp)
         )
 
         Text(
-            text = "Test de TEST",
+            text = "Test de Transtorno de Ansiedad",
             fontSize = 24.sp,
             modifier = Modifier.padding(bottom = 16.dp),
             textAlign = TextAlign.Center
         )
 
         Button(
-            onClick = {context.startActivity(Intent(context, InicioCognitivo::class.java))},
+            onClick = { context.startActivity(Intent(context, EscogerTestActivity::class.java)) },
             modifier = Modifier.padding(vertical = 8.dp)
         ) {
-            Text("ISRA")
-        }
-
-        Button(
-            onClick = { /* Handle HAS */ },
-            modifier = Modifier.padding(vertical = 8.dp)
-        ) {
-            Text("HAS")
-        }
-
-        Button(
-            onClick = { /* Handle STAI */ },
-            modifier = Modifier.padding(vertical = 8.dp)
-        ) {
-            Text("STAI")
+            Text("Iniciar Test")
         }
 
         Button(
@@ -101,9 +83,8 @@ fun EscogerTestScreen() {
 
 @Preview(showBackground = true)
 @Composable
-fun EscogerTestScreenPreview() {
+fun IniciarTestScreenPreview() {
     ProyectoSISVITATheme {
-        EscogerTestScreen()
+        IniciarTestScreen()
     }
 }
-

@@ -1,5 +1,5 @@
 // RegistroActivity.kt
-package com.example.proyecto_sisvita.registro.TestIsra.Login
+package com.example.proyecto_sisvita.registro.TestIsra.RegistroYPrimerTest
 
 import android.content.Intent
 import android.os.Bundle
@@ -46,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.R
+import com.example.proyecto_sisvita.registro.TestIsra.Login.MainActivity
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 
 class RegistroActivity : ComponentActivity() {

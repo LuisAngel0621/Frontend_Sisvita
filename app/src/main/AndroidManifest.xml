@@ -13,13 +13,17 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".registro.TestIsra.Login.LoginActivity" />
-        <activity android:name=".registro.TestIsra.Login.RegistroActivity"/>
-        <activity android:name=".registro.TestIsra.Login.TerminosActivity"/>
-        <activity android:name=".registro.TestIsra.escogerTest.IniciarTestActivity"/>
-        <activity android:name=".registro.TestIsra.escogerTest.EscogerTestActivity"/>
+        <activity android:name=".registro.TestIsra.RegistroYPrimerTest.RegistroActivity"/>
+        <activity android:name=".registro.TestIsra.RegistroYPrimerTest.TerminosActivity"/>
+        <activity android:name=".registro.TestIsra.RegistroYPrimerTest.IniciarTestActivity"/>
+        <activity android:name=".registro.TestIsra.RegistroYPrimerTest.EscogerTestActivity"/>
         <activity android:name=".registro.TestIsra.ISRA.TestISRA"/>
         <activity android:name=".registro.TestIsra.ISRA.InicioCognitivo"/>
         <activity android:name=".registro.TestIsra.ISRA.finISRA"/>
+        <activity android:name=".registro.TestIsra.EspecialistaMenu.MenuRevisar"/>
+        <activity android:name=".registro.TestIsra.EspecialistaMenu.TestDiagnostico"/>
+        <activity android:name=".registro.TestIsra.EspecialistaMenu.TestPendientes"/>
+        <activity android:name=".registro.TestIsra.EspecialistaMenu.TestRevisados"/>
         <activity android:name=".registro.TestIsra.Login.MainActivity"
 
             android:exported="true">
