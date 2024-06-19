@@ -12,14 +12,15 @@ import retrofit2.http.POST
 interface ApiService {
 
     @POST("/RealizarTest")
-    suspend fun datospacienteApiService(
-        @Body paciente: Paciente
-    ): Response<PacienteResponse>
-
-    @POST("/RegistrarUsuario")
     suspend fun respuestaspacienteApiService(
         @Body usuarioTest: UsuarioTest
     ): Response<UsuarioTestResponse>
+
+
+    @POST("/RegistrarUsuario")
+    suspend fun datospacienteApiService(
+        @Body paciente: Paciente
+    ): Response<PacienteResponse>
 
 
 }

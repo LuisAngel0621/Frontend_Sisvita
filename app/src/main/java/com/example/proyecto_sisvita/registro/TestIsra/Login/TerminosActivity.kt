@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.R
 import com.example.proyecto_sisvita.data.model.Paciente
-import com.example.proyecto_sisvita.registro.TestIsra.escogerTest.IniciarTestActivity
+import com.example.proyecto_sisvita.registro.TestIsra.RegistroYPrimerTest.IniciarTestActivity
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 import com.example.proyecto_sisvita.viewmodel.PacientesViewModel
 
