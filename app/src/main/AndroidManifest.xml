@@ -24,6 +24,7 @@
         <activity android:name=".registro.TestIsra.EspecialistaMenu.TestDiagnostico"/>
         <activity android:name=".registro.TestIsra.EspecialistaMenu.TestPendientes"/>
         <activity android:name=".registro.TestIsra.EspecialistaMenu.TestRevisados"/>
+        <activity android:name=".registro.TestIsra.TestApi.VistaDatos"/>
         <activity android:name=".registro.TestIsra.Login.MainActivity"
 
             android:exported="true">

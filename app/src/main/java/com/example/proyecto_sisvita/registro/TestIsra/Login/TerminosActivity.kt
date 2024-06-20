@@ -172,7 +172,7 @@ fun TerminosScreen(nombres: String,apellidos: String,correo: String,edad: String
     }
 }
 
-@Preview()
+@Preview(showBackground = true)
 @Composable
 fun TerminosActivityScreenPreview(
     nombre: String,

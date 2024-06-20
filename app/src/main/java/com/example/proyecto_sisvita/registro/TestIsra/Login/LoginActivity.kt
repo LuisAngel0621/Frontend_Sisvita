@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.R
 import com.example.proyecto_sisvita.registro.TestIsra.EspecialistaMenu.MenuRevisar
+import com.example.proyecto_sisvita.registro.TestIsra.TestApi.VistaDatos
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 
 class LoginActivity : ComponentActivity() {
@@ -109,6 +110,15 @@ fun LoginScreen() {
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
         ) {
             Text("Atras")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = { context.startActivity(Intent(context, VistaDatos::class.java)) },
+            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+        ) {
+            Text("TEST DATA")
         }
     }
 }
