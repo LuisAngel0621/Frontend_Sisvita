@@ -59,10 +59,11 @@ fun EscogerTestScreen() {
         )
 
         Text(
-            text = "Test de TEST",
+            text = "ELEGIR TEST",
             fontSize = 24.sp,
             modifier = Modifier.padding(bottom = 16.dp),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = Color(0xFF45ACCC)
         )
 
         Button(

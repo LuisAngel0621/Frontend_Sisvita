@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -78,7 +79,6 @@ fun DiagnosticoContent(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
             .background(Color(0xFFE0F7FA)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -99,7 +99,7 @@ fun DiagnosticoContent(navController: NavHostController) {
             onValueChange = {},
             label = { Text("Doctor",onTextLayout = {}) },
             readOnly = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp, horizontal = 30.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
@@ -107,7 +107,7 @@ fun DiagnosticoContent(navController: NavHostController) {
             onValueChange = {},
             label = { Text("Paciente",onTextLayout = {}) },
             readOnly = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp, horizontal = 30.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
         CustomDropdownMenu(
@@ -122,24 +122,26 @@ fun DiagnosticoContent(navController: NavHostController) {
             onValueChange = { fecha.value = it },
             label = { Text("Fecha",onTextLayout = {}) },
             readOnly = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp, horizontal = 30.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = diagnostico.value,
             onValueChange = { diagnostico.value = it },
             label = { Text("Diagnóstico",onTextLayout = {}) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp, horizontal = 30.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row(
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth()
         ) {
             Button(
                 onClick = { navController.navigateUp() },
                 shape = RoundedCornerShape(50)
             ) {
                 Text("Volver",onTextLayout = {})
+
             }
             Button(
                 onClick = { /* Acción para enviar diagnóstico */ },

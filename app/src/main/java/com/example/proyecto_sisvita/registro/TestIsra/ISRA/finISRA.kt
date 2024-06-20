@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -64,6 +65,7 @@ fun finScreen() {
                 text = "Se registraron tus respuestas de la fase cognitiva",
                 fontSize = 30.sp,
                 color = Color.Black,
+                textAlign = TextAlign.Center
             )
             Button(
                 onClick = { /* Acción al enviar el cuestionario */ },

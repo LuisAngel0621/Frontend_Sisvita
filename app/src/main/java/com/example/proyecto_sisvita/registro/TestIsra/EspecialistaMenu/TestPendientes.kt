@@ -5,12 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -62,20 +60,21 @@ fun PendientesContent(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
             .background(Color(0xFFE0F7FA)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = painterResource(id = R.drawable.sisvita_logo),
             contentDescription = "Logo",
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier
+                .padding(40.dp)
+                .size(80.dp)
         )
         Text(onTextLayout = {},
             text = "Revisiones Pendientes",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(vertical = 16.dp)
+            color = Color(0xFF4AB3CF)
         )
         Spacer(modifier = Modifier.height(16.dp))
         PaginacionRevisiones(navController)
@@ -99,9 +98,9 @@ fun PaginacionRevisiones(navController: NavHostController) {
 
     Column {
         pacientes.chunked(2).forEachIndexed { index, chunk ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 chunk.forEach { paciente ->
                     RevisionCard(navController, paciente)
@@ -116,36 +115,39 @@ fun RevisionCard(navController: NavHostController, paciente: Paciente) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(0.45f)
             .background(Color.White, RoundedCornerShape(8.dp)),
-        elevation = CardDefaults.elevatedCardElevation(4.dp)
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF50ABCE)),
+        elevation = CardDefaults.elevatedCardElevation(20.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier.padding(16.dp).size(300.dp,180.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(paciente.nombre, fontWeight = FontWeight.Bold,onTextLayout = {})
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("Cognitivo: ${paciente.cognitivo}", color = Color.Red,onTextLayout = {})
-            Text("Fisiologico: ${paciente.fisiologico}", color = Color.Red,onTextLayout = {})
-            Text("Motor: ${paciente.motor}", color = Color.Red,onTextLayout = {})
-            Text("Resultado General: ${paciente.resultadoGeneral}", color = Color.Red,onTextLayout = {})
-            Spacer(modifier = Modifier.height(8.dp))
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(paciente.nombre, fontWeight = FontWeight.Bold, onTextLayout = {})
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Cognitivo: ${paciente.cognitivo}", color = Color(0xFF14504E), onTextLayout = {})
+                Text("Fisiologico: ${paciente.fisiologico}", color = Color(0xFF14504E), onTextLayout = {})
+                Text("Motor: ${paciente.motor}", color = Color(0xFF14504E), onTextLayout = {})
+                Text("Resultado General: ${paciente.resultadoGeneral}", color = Color(0xFF14504E), onTextLayout = {})
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = { navController.navigate("diagnostico") },
+                    shape = RoundedCornerShape(50)
+                ) {
+                    Text("Revisar", onTextLayout = {})
+                }
+            }
             Image(
                 painter = painterResource(id = R.drawable.especialista),
                 contentDescription = "Profile Image",
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(100.dp)
                     .background(Color.Gray, CircleShape),
                 contentScale = ContentScale.Crop
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                onClick = { navController.navigate("diagnostico") },
-                shape = RoundedCornerShape(50)
-            ) {
-                Text("Revisar",onTextLayout = {})
-            }
         }
     }
 }

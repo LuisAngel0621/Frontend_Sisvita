@@ -62,7 +62,7 @@ fun SplashScreen(onCountDownFinished: () -> Unit) {
             Text(
                 text = "Test Fase Cognitiva",
                 fontSize = 40.sp,
-                color = Color.Black
+                color = Color(0xFF45ACCC)
             )
             Spacer(modifier = Modifier.height(30.dp))
             Image(
