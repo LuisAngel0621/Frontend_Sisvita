@@ -1,5 +1,3 @@
-//"TestRevisados.kt"
-
 package com.example.proyecto_sisvita.registro.TestIsra.EspecialistaMenu
 
 import android.os.Bundle
@@ -18,14 +16,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -37,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,66 +76,134 @@ fun RevisadosScreen(navController: NavHostController = rememberNavController()) 
 
 @Composable
 fun RevisadosContent(navController: NavHostController) {
+    val context = LocalContext.current
+    val pacientes = listOf(
+        PacienteR("Andres Arriel Paladino", "ALTO", "EN REVISION"),
+        PacienteR("Jorge Manrico Condorcanqui",  "MEDIO","ATENDIDO"),
+        PacienteR("Carlos Perez", "ALTO","ATENDIDO"),
+        PacienteR("Maria Lopez", "BAJO","EN REVISION"),
+        PacienteR("Ana Gomez", "MEDIO","EN REVISION"),
+        PacienteR("Luis Rodriguez",  "ALTO","ATENDIDO")
+    )
+
+    val itemsPerPage = 4
+    val totalPages = (pacientes.size + itemsPerPage - 1) / itemsPerPage
+    val currentPage = remember { mutableStateOf(0) }
     val estados = listOf("En revisión", "Atendido")
     val estadoSeleccionado = remember { mutableStateOf(estados[0]) }
+
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
             .background(Color(0xFFE0F7FA)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = painterResource(id = R.drawable.sisvita_logo),
             contentDescription = "Logo",
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier
+                .padding(20.dp)
+                .size(40.dp)
         )
-        Text(onTextLayout = {},
-            text = "Seguimiento de Pacientes",
+        Text(
+            text = "Seguimiento de pacientes",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(vertical = 16.dp)
+            color = Color(0xFF45ACCC)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         CustomDropdownMenuRevisado(
             value = estadoSeleccionado.value,
             onValueChange = { estadoSeleccionado.value = it },
             label = "Estado",
             options = estados
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        val startIndex = currentPage.value * itemsPerPage
+        val endIndex = (startIndex + itemsPerPage).coerceAtMost(pacientes.size)
+        val currentItems = pacientes.subList(startIndex, endIndex)
+        LazyColumn {
+            items(currentItems) { paciente ->
+                RevisionCard(paciente,navController)
+            }
+        }
         Spacer(modifier = Modifier.height(16.dp))
-        PaginacionRevisados(navController)
-        Spacer(modifier = Modifier.height(16.dp))
+        PaginationControlsR(currentPage.value, totalPages) { newPage ->
+            currentPage.value = newPage
+        }
+        Spacer(modifier = Modifier.height(4.dp))
         Button(
-            onClick = { navController.navigateUp() },
-            shape = RoundedCornerShape(50)
+            onClick = { (context as? ComponentActivity)?.finish() },
+            shape = RoundedCornerShape(25),
         ) {
-            Text("Volver",onTextLayout = {})
+            Text("Volver")
         }
     }
 }
-@Composable
-fun PaginacionRevisados(navController: NavHostController) {
-    // Aquí se muestran las revisiones pendientes
-    val pacientes = listOf(
-        Paciente("Andres Arriel Paladino", 28, 30, 12, "ALTO"),
-        Paciente("Jorge Manrico Condorcanqui", 10, 7, 5, "MEDIO")
-    )
 
-    Column {
-        pacientes.chunked(2).forEachIndexed { index, chunk ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+@Composable
+fun PaginationControlsR(currentPage: Int, totalPages: Int, onPageChange: (Int) -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        IconButton(
+            onClick = { if (currentPage > 0) onPageChange(currentPage - 1) },
+            enabled = currentPage > 0
+        ) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Anterior")
+        }
+        Text(
+            text = "${currentPage + 1} / $totalPages",
+            modifier = Modifier.padding(horizontal = 16.dp),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+        IconButton(
+            onClick = { if (currentPage < totalPages - 1) onPageChange(currentPage + 1) },
+            enabled = currentPage < totalPages - 1
+        ) {
+            Icon(Icons.Filled.ArrowForward, contentDescription = "Siguiente")
+        }
+    }
+}
+
+// Definición del RevisionCard que acepta paciente y navController
+@Composable
+fun RevisionCard(paciente: PacienteR, navController: NavHostController) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .background(Color.White, RoundedCornerShape(8.dp)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF50ABCE)),
+        elevation = CardDefaults.elevatedCardElevation(20.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp).size(321.dp,80.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
             ) {
-                chunk.forEach { paciente ->
-                    RevisionCard(navController, paciente)
-                }
+                Text(paciente.nombre, fontWeight = FontWeight.Bold, onTextLayout = {})
+                Spacer(modifier = Modifier.height(4.dp))
+                Text("Resultado General: ${paciente.resultadoGeneral}", color = Color(0xFF14504E), onTextLayout = {})
+                Text("Estado: ${paciente.estado}", color = Color(0xFF14504E), onTextLayout = {})
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+            Button(
+                onClick = { navController.navigate("diagnostico") },
+                shape = RoundedCornerShape(40)
+            ) {
+                Text("Revisar", fontSize = 12.sp )
             }
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomDropdownMenuRevisado(
@@ -153,7 +227,7 @@ fun CustomDropdownMenuRevisado(
             OutlinedTextField(
                 value = value,
                 onValueChange = { },
-                label = { Text(label,onTextLayout = {}) },
+                label = { Text(label) },
                 readOnly = true,
                 trailingIcon = {
                     Icon(
@@ -177,7 +251,7 @@ fun CustomDropdownMenuRevisado(
             ) {
                 options.forEach { option ->
                     DropdownMenuItem(
-                        text = { Text(option,onTextLayout = {}) },
+                        text = { Text(option) },
                         onClick = {
                             onValueChange(option)
                             expanded = false
@@ -189,6 +263,12 @@ fun CustomDropdownMenuRevisado(
     }
 }
 
+// Definición del modelo Paciente
+data class PacienteR(
+    val nombre: String,
+    val resultadoGeneral: String,
+    val estado: String
+)
 @Preview(showBackground = true)
 @Composable
 fun RevisadosPreview() {
@@ -198,4 +278,5 @@ fun RevisadosPreview() {
         }
     }
 }
+
 

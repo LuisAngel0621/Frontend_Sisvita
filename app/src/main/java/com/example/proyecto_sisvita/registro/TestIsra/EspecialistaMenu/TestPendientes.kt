@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,22 +59,29 @@ class TestPendientes : ComponentActivity() {
 }
 
 @Composable
-fun PendientesScreen(navController: NavHostController = rememberNavController()) {
+fun PendientesScreen() {
+    val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "pendientes") {
         composable("pendientes") { PendientesContent(navController) }
-        composable("diagnostico") { /* Aquí iría la navegación a la pantalla de diagnóstico */ }
+        composable(
+            "diagnostico/{nombre}"
+        ) { backStackEntry ->
+            val nombre = backStackEntry.arguments?.getString("nombre") ?: ""
+            DiagnosticoScreen(nombre)
+        }
     }
 }
 
 @Composable
 fun PendientesContent(navController: NavHostController) {
+    val context = LocalContext.current
     val pacientes = listOf(
-        Paciente("Andres Arriel Paladino", 28, 30, 12, "ALTO"),
-        Paciente("Jorge Manrico Condorcanqui", 10, 7, 5, "MEDIO"),
-        Paciente("Carlos Perez", 15, 20, 10, "ALTO"),
-        Paciente("Maria Lopez", 8, 10, 7, "BAJO"),
-        Paciente("Ana Gomez", 12, 14, 10, "MEDIO"),
-        Paciente("Luis Rodriguez", 20, 18, 15, "ALTO")
+        PacienteP("Andres Arriel Paladino", 28, 30, 12, "ALTO"),
+        PacienteP("Jorge Manrico Condorcanqui", 27, 25, 15, "MEDIO"),
+        PacienteP("Carlos Perez", 30, 28, 20, "ALTO"),
+        PacienteP("Maria Lopez", 25, 22, 18, "BAJO"),
+        PacienteP("Ana Gomez", 24, 20, 10, "MEDIO"),
+        PacienteP("Luis Rodriguez", 29, 26, 14, "ALTO")
     )
 
     val itemsPerPage = 2
@@ -107,7 +115,9 @@ fun PendientesContent(navController: NavHostController) {
 
         LazyColumn {
             items(currentItems) { paciente ->
-                RevisionCard(navController, paciente)
+                PendienteCard(paciente) {
+                    navController.navigate("diagnostico/${paciente.nombre}")
+                }
             }
         }
 
@@ -118,10 +128,10 @@ fun PendientesContent(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { navController.navigateUp() },
+            onClick = { (context as? ComponentActivity)?.finish() },
             shape = RoundedCornerShape(50)
         ) {
-            Text("Volver", onTextLayout = {})
+            Text("Volver")
         }
     }
 }
@@ -156,29 +166,7 @@ fun PaginationControls(currentPage: Int, totalPages: Int, onPageChange: (Int) ->
 }
 
 @Composable
-fun PaginacionRevisiones(navController: NavHostController) {
-    // Aquí se muestran las revisiones pendientes
-    val pacientes = listOf(
-        Paciente("Andres Arriel Paladino", 28, 30, 12, "ALTO"),
-        Paciente("Jorge Manrico Condorcanqui", 10, 7, 5, "MEDIO")
-    )
-
-    Column {
-        pacientes.chunked(2).forEachIndexed { index, chunk ->
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                chunk.forEach { paciente ->
-                    RevisionCard(navController, paciente)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun RevisionCard(navController: NavHostController, paciente: Paciente) {
+fun PendienteCard(paciente: PacienteP, navigateToDiagnostico: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -187,24 +175,26 @@ fun RevisionCard(navController: NavHostController, paciente: Paciente) {
         elevation = CardDefaults.elevatedCardElevation(20.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp).size(300.dp,180.dp),
+            modifier = Modifier
+                .padding(16.dp)
+                .size(325.dp, 180.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(paciente.nombre, fontWeight = FontWeight.Bold, onTextLayout = {})
+                Text(paciente.nombre, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("Cognitivo: ${paciente.cognitivo}", color = Color(0xFF14504E), onTextLayout = {})
-                Text("Fisiologico: ${paciente.fisiologico}", color = Color(0xFF14504E), onTextLayout = {})
-                Text("Motor: ${paciente.motor}", color = Color(0xFF14504E), onTextLayout = {})
-                Text("Resultado General: ${paciente.resultadoGeneral}", color = Color(0xFF14504E), onTextLayout = {})
+                Text("Cognitivo: ${paciente.cognitivo}", fontWeight = FontWeight.Normal)
+                Text("Fisiológico: ${paciente.fisiologico}", fontWeight = FontWeight.Normal)
+                Text("Motor: ${paciente.motor}", fontWeight = FontWeight.Normal)
+                Text("Resultado General: ${paciente.resultadoGeneral}", fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
-                    onClick = { navController.navigate("diagnostico") },
+                    onClick = navigateToDiagnostico,
                     shape = RoundedCornerShape(50)
                 ) {
-                    Text("Revisar", onTextLayout = {})
+                    Text("Revisar")
                 }
             }
             Image(
@@ -219,7 +209,8 @@ fun RevisionCard(navController: NavHostController, paciente: Paciente) {
     }
 }
 
-data class Paciente(
+// Definición del modelo Paciente
+data class PacienteP(
     val nombre: String,
     val cognitivo: Int,
     val fisiologico: Int,
@@ -232,9 +223,7 @@ data class Paciente(
 fun PendientesPreview() {
     ProyectoSISVITATheme {
         MyApp {
-            PendientesScreen()
+            PendientesContent(rememberNavController())
         }
     }
 }
-
-

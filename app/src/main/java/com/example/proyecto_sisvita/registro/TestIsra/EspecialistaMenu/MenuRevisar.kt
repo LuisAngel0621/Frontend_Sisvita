@@ -47,14 +47,18 @@ class MenuRevisar : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun MenuRevisarScreen(navController: NavHostController = rememberNavController()) {
     NavHost(navController = navController, startDestination = "menurevisar") {
         composable("menurevisar") { MenuRevisarContent(navController) }
-        composable("pendientes") { PendientesScreen() }
+        composable("pendientes") {
+            PendientesScreen()
+        }
         composable("revisados") { RevisadosScreen() }
     }
 }
+
 @Composable
 fun MenuRevisarContent(navController: NavHostController) {
     val context = LocalContext.current
@@ -75,9 +79,8 @@ fun MenuRevisarContent(navController: NavHostController) {
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 30.dp,bottom = 30.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 30.dp, bottom = 30.dp)) {
                 // Logo
-
                 Image(
                     painter = painterResource(id = R.drawable.sisvita_logo), // Asegúrate de tener esta imagen en la carpeta drawable
                     contentDescription = null,
@@ -92,14 +95,14 @@ fun MenuRevisarContent(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
             Text("Bienvenido ", fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(16.dp))
-            //ACÁ LA IMAGEN REFERENCIAL AL ESPECIALISTA
+            // ACÁ LA IMAGEN REFERENCIAL AL ESPECIALISTA
             Image(
                 painter = painterResource(id = R.drawable.especialista), // tu logo
                 contentDescription = "Logo",
                 modifier = Modifier.size(130.dp),
                 contentScale = ContentScale.Fit
             )
-            //ACÁ LA IMAGEN REFERENCIAL AL ESPECIALISTA
+            // ACÁ LA IMAGEN REFERENCIAL AL ESPECIALISTA
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = { navController.navigate("pendientes") },
