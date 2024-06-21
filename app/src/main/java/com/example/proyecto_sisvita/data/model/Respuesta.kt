@@ -1,13 +1,13 @@
 package com.example.proyecto_sisvita.data.model
 
-data class Pregunta (
+data class Respuesta(
     val descripcion: String,
-    val id_preguntas: Int
+    val id_respuestas: Int,
 ){
     fun toArrayList(): ArrayList<String>{
         return arrayListOf(
             descripcion,
-            id_preguntas.toString()
+            id_respuestas.toString()
         )
     }
 }

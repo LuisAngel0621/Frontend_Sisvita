@@ -17,9 +17,7 @@
         <activity android:name=".registro.TestIsra.RegistroYPrimerTest.TerminosActivity"/>
         <activity android:name=".registro.TestIsra.RegistroYPrimerTest.IniciarTestActivity"/>
         <activity android:name=".registro.TestIsra.RegistroYPrimerTest.EscogerTestActivity"/>
-        <activity android:name=".registro.TestIsra.ISRA.TestISRA"/>
         <activity android:name=".registro.TestIsra.ISRA.InicioCognitivo"/>
-        <activity android:name=".registro.TestIsra.ISRA.finISRA"/>
         <activity android:name=".registro.TestIsra.EspecialistaMenu.MenuRevisar"/>
         <activity android:name=".registro.TestIsra.EspecialistaMenu.TestDiagnostico"/>
         <activity android:name=".registro.TestIsra.EspecialistaMenu.TestPendientes"/>
