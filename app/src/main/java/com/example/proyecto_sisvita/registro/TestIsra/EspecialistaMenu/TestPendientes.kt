@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,13 +13,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,6 +67,19 @@ fun PendientesScreen(navController: NavHostController = rememberNavController())
 
 @Composable
 fun PendientesContent(navController: NavHostController) {
+    val pacientes = listOf(
+        Paciente("Andres Arriel Paladino", 28, 30, 12, "ALTO"),
+        Paciente("Jorge Manrico Condorcanqui", 10, 7, 5, "MEDIO"),
+        Paciente("Carlos Perez", 15, 20, 10, "ALTO"),
+        Paciente("Maria Lopez", 8, 10, 7, "BAJO"),
+        Paciente("Ana Gomez", 12, 14, 10, "MEDIO"),
+        Paciente("Luis Rodriguez", 20, 18, 15, "ALTO")
+    )
+
+    val itemsPerPage = 2
+    val totalPages = (pacientes.size + itemsPerPage - 1) / itemsPerPage
+    val currentPage = remember { mutableStateOf(0) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,20 +93,64 @@ fun PendientesContent(navController: NavHostController) {
                 .padding(40.dp)
                 .size(80.dp)
         )
-        Text(onTextLayout = {},
+        Text(
             text = "Revisiones Pendientes",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF4AB3CF)
+            color = Color(0xFF45ACCC)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        PaginacionRevisiones(navController)
+
+        val startIndex = currentPage.value * itemsPerPage
+        val endIndex = (startIndex + itemsPerPage).coerceAtMost(pacientes.size)
+        val currentItems = pacientes.subList(startIndex, endIndex)
+
+        LazyColumn {
+            items(currentItems) { paciente ->
+                RevisionCard(navController, paciente)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        PaginationControls(currentPage.value, totalPages) { newPage ->
+            currentPage.value = newPage
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = { navController.navigateUp() },
             shape = RoundedCornerShape(50)
         ) {
-            Text("Volver",onTextLayout = {})
+            Text("Volver", onTextLayout = {})
+        }
+    }
+}
+
+@Composable
+fun PaginationControls(currentPage: Int, totalPages: Int, onPageChange: (Int) -> Unit) {
+    Row(
+        modifier = Modifier.padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        IconButton(
+            onClick = { if (currentPage > 0) onPageChange(currentPage - 1) },
+            enabled = currentPage > 0
+        ) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Anterior")
+        }
+        Text(
+            text = "${currentPage + 1} / $totalPages",
+            modifier = Modifier.padding(horizontal = 16.dp),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+        IconButton(
+            onClick = { if (currentPage < totalPages - 1) onPageChange(currentPage + 1) },
+            enabled = currentPage < totalPages - 1
+        ) {
+            Icon(Icons.Filled.ArrowForward, contentDescription = "Siguiente")
         }
     }
 }
