@@ -128,7 +128,7 @@ fun PendientesContent(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { (context as? ComponentActivity)?.finish() },
+            onClick = { (context as? MenuRevisar)?.finish() },
             shape = RoundedCornerShape(50)
         ) {
             Text("Volver")

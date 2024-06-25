@@ -134,7 +134,7 @@ fun RevisadosContent(navController: NavHostController) {
         }
         Spacer(modifier = Modifier.height(4.dp))
         Button(
-            onClick = { (context as? ComponentActivity)?.finish() },
+            onClick = { (context as? MenuRevisar)?.finish() },
             shape = RoundedCornerShape(25),
         ) {
             Text("Volver")
