@@ -12,11 +12,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PreguntasTestViewModel: ViewModel() {
-    var _listaPreguntas: List<ArrayList<String>> by mutableStateOf(arrayListOf())
 
     fun getPreguntas(){
         viewModelScope.launch(Dispatchers.IO) {
             val response = ApiInstance.apiInstance.obtenerPreguntas()
+            withContext(Dispatchers.Main){
+                if(response.body()!!.status == 201){
+                   val cuerpo = response.body()
+                    var listapreguntas = cuerpo?.preguntas?.toArrayList()
+                }
+            }
+
+            /*
             if (response.isSuccessful){
                 withContext(Dispatchers.Main)
                 {
@@ -29,7 +36,7 @@ class PreguntasTestViewModel: ViewModel() {
                 }
             }else{
                 println("Fallo en la recoleccion de data")
-            }
+            }*/
         }
     }
 }

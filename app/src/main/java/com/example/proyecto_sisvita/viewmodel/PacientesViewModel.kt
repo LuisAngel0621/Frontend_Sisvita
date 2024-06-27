@@ -14,7 +14,7 @@ class PacientesViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             val response = ApiInstance.apiInstance.datospacienteApiService(paciente)
             withContext(Dispatchers.Main){
-                if(response.body()!!.codigo == "200"){
+                if(response.body()!!.codigo == "201"){
                     println("Paciente Registrado")
                 }
             }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,23 +34,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.R
+import com.example.proyecto_sisvita.data.model.LoginRequest
 import com.example.proyecto_sisvita.registro.TestIsra.EspecialistaMenu.MenuRevisar
 import com.example.proyecto_sisvita.registro.TestIsra.TestApi.VistaDatos
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
+import com.example.proyecto_sisvita.viewmodel.LoginViewModel
 
 class LoginActivity : ComponentActivity() {
+    val viewModel by viewModels<LoginViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ProyectoSISVITATheme {
-                LoginScreen()
+                LoginScreen(viewModel = viewModel)
             }
         }
     }
 }
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(viewModel: LoginViewModel) {
     val context = LocalContext.current
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -94,7 +98,14 @@ fun LoginScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { context.startActivity(Intent(context, MenuRevisar::class.java)) },
+            onClick = {
+                viewModel.inicioSesion(LoginRequest(correoelectronico = username.value,contraseña = password.value))
+                if (viewModel.validacion == "succes"){
+                    context.startActivity(Intent(context, MenuRevisar::class.java))
+                }else{
+                    println("No se pudo iniciar sesion")
+                }
+            },
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
         ) {
             Text("Iniciar sesión")
@@ -127,6 +138,6 @@ fun LoginScreen() {
 @Composable
 fun LoginScreenPreview() {
     ProyectoSISVITATheme {
-        LoginScreen()
+        LoginScreen(viewModel = LoginViewModel())
     }
 }
