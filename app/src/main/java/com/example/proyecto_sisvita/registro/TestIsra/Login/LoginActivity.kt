@@ -99,8 +99,9 @@ fun LoginScreen(viewModel: LoginViewModel) {
 
         Button(
             onClick = {
-                viewModel.inicioSesion(LoginRequest(correoelectronico = username.value,contraseña = password.value))
-                if (viewModel.validacion == "succes"){
+                viewModel.inicioSesion(LoginRequest(correoinstitucional = username.value,contraseña = password.value))
+                println(viewModel.validacion)
+                if (viewModel.validacion == "success"){
                     context.startActivity(Intent(context, MenuRevisar::class.java))
                 }else{
                     println("No se pudo iniciar sesion")

@@ -7,7 +7,7 @@ object ApiInstance {
 
     private val retrofit by lazy{
         Retrofit.Builder()
-            .baseUrl("https://backend-sisvita-93yl.onrender.com/")
+            .baseUrl("https://backend-sisvita-93yl.onrender.com")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

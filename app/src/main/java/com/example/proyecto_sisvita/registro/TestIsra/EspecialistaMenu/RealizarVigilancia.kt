@@ -1,9 +1,10 @@
 package com.example.proyecto_sisvita.registro.TestIsra.EspecialistaMenu
 
-import android.icu.text.SimpleDateFormat
+//import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,25 +49,34 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_sisvita.MyApp
 import com.example.proyecto_sisvita.R
+import com.example.proyecto_sisvita.data.model.Diagnostico
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
-import java.util.Date
+import com.example.proyecto_sisvita.viewmodel.VigilanciaViewModel
+import java.text.SimpleDateFormat
 
 class RealizarVigilancia : ComponentActivity() {
+    val viewModel by viewModels<VigilanciaViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                PendientesScreen()
+                viewModel.realizarVigilancia()
+                PendientesScreen(viewModel.diagnosticos,viewModel)
             }
         }
     }
 }
 
 @Composable
-fun PendientesScreen() {
+fun PendientesScreen(listaDiagnosticos: ArrayList<Diagnostico>, viewModel: VigilanciaViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "pendientes") {
-        composable("pendientes") { PendientesContent(navController) }
+        composable("pendientes") {
+            PendientesContent(listaDiagnosticos,viewModel,navController)
+        }
+        composable("menuRevisar") {
+            MenuRevisar()
+        }
         composable(
             "diagnostico/{nombre}"
         ) { backStackEntry ->
@@ -77,11 +87,11 @@ fun PendientesScreen() {
 }
 
 @Composable
-fun PendientesContent(navController: NavHostController) {
+fun PendientesContent(listaDiagnosticos: ArrayList<Diagnostico>, viewModel: VigilanciaViewModel,navController: NavHostController) {
     val context = LocalContext.current
     val dateFormat = SimpleDateFormat("dd/MM/yyyy")
 
-    val pacientes = listOf(
+    /*val pacientes = listOf(
         PacienteP("Andres Arriel Paladino", "ISRA", dateFormat.parse("24/10/2024"),30, "Ansiedad marcada"),
         PacienteP("Jorge Manrico Condorcanqui", "HAS", dateFormat.parse("22/09/2024"),45, "Ansiedad moderada"),
         PacienteP("Carlos Perez", "ISRA", dateFormat.parse("30/08/2024"),50, "Ansiedad moderada"),
@@ -89,9 +99,9 @@ fun PendientesContent(navController: NavHostController) {
         PacienteP("Ana Gomez", "STAI", dateFormat.parse("02/10/2024"),45, "Ansiedad moderada"),
         PacienteP("Luis Rodriguez", "HAS", dateFormat.parse("03/11/2024"),30, "Ansiedad marcada"),
         PacienteP("Eduardo Armado", "ISRA", dateFormat.parse("23/09/2024"),10, "Prueba ansiedad"),
-    )
+    )*/
     val itemsPerPage = 2
-    val totalPages = (pacientes.size + itemsPerPage - 1) / itemsPerPage
+    val totalPages = (listaDiagnosticos.size + itemsPerPage - 1) / itemsPerPage
     val currentPage = remember { mutableStateOf(0) }
 
     Column(
@@ -116,13 +126,13 @@ fun PendientesContent(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         val startIndex = currentPage.value * itemsPerPage
-        val endIndex = (startIndex + itemsPerPage).coerceAtMost(pacientes.size)
-        val currentItems = pacientes.subList(startIndex, endIndex)
+        val endIndex = (startIndex + itemsPerPage).coerceAtMost(listaDiagnosticos.size)
+        val currentItems = listaDiagnosticos.subList(startIndex, endIndex)
 
         LazyColumn {
-            items(currentItems) { paciente ->
-                PendienteCard(paciente) {
-                    navController.navigate("diagnostico/${paciente.nombre}")
+            items(currentItems) { diagnostico ->
+                PendienteCard(diagnostico) {
+                    navController.navigate("diagnostico/${diagnostico.nombres}")
                 }
             }
         }
@@ -139,11 +149,10 @@ fun PendientesContent(navController: NavHostController) {
             modifier = Modifier.fillMaxWidth()
         ) {
             Button(onClick = {
-                (context as? MenuRevisar)?.finish()  },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFC3F52) // Rojo claro
-                )
-            ) {
+                navController.navigate("menuRevisar")
+            }, colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFFC3F52) // Rojo claro
+            )) {
                 Text("Atrás")
             }
             Button(
@@ -189,23 +198,23 @@ fun PaginationControls(currentPage: Int, totalPages: Int, onPageChange: (Int) ->
     }
 }
 
-fun getColorForAnxietyLevel(nivel_ansiedad: String): Color {
+fun getColorForAnxietyLevel(nivel_ansiedad: Int): Color {
     return when (nivel_ansiedad) {
-        "Prueba Ansiedad" -> Color(0xFF4CAF50) // Verde claro
-        "Ansiedad marcada" -> Color(0xFFDCEDC1) // Verde limon
-        "Ansiedad moderada" -> Color(0xFFFFF176) // Amarillo
-        "Ansiedad severa" -> Color(0xFFFFAB40) // Naranja
-        "Ansiedad extrema" -> Color(0xFFFF5252) // Rojo
+        1 -> Color(0xFF4CAF50) // Verde claro
+        2-> Color(0xFFDCEDC1) // Verde limon
+        3 -> Color(0xFFFFF176) // Amarillo
+        4 -> Color(0xFFFFAB40) // Naranja
+        5 -> Color(0xFFFF5252) // Rojo
         else -> Color(0xFF50ABCE) // Color por defecto
     }
 }
 @Composable
-fun PendienteCard(paciente: PacienteP, navigateToDiagnostico: () -> Unit) {
+fun PendienteCard(diagnostico: Diagnostico, navigateToDiagnostico: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .background(Color.White, RoundedCornerShape(8.dp)),
-        colors = CardDefaults.cardColors(containerColor = getColorForAnxietyLevel(paciente.nivel_ansiedad)),
+        colors = CardDefaults.cardColors(containerColor = getColorForAnxietyLevel(diagnostico.id_nivel)),
         elevation = CardDefaults.elevatedCardElevation(20.dp)
     ) {
         Row(
@@ -217,12 +226,12 @@ fun PendienteCard(paciente: PacienteP, navigateToDiagnostico: () -> Unit) {
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(paciente.nombre, fontWeight = FontWeight.Bold)
+                Text("${diagnostico.nombres} ${diagnostico.apellidos}", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("Test: ${paciente.tipo_test}", fontWeight = FontWeight.Normal)
-                Text("Fecha: ${paciente.fecha_test}", fontWeight = FontWeight.Normal)
-                Text("Puntaje: ${paciente.puntaje}", fontWeight = FontWeight.Normal)
-                Text("Nivel: ${paciente.nivel_ansiedad}", fontWeight = FontWeight.Normal)
+                Text("Test: ${diagnostico.tipo_test}", fontWeight = FontWeight.Normal)
+                Text("Fecha: ${diagnostico.fecha_test}", fontWeight = FontWeight.Normal)
+                Text("Puntaje: ${diagnostico.puntaje}", fontWeight = FontWeight.Normal)
+                Text("Nivel: ${diagnostico.id_nivel}", fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
                     onClick = navigateToDiagnostico,
@@ -243,21 +252,16 @@ fun PendienteCard(paciente: PacienteP, navigateToDiagnostico: () -> Unit) {
     }
 }
 
-// Definición del modelo Paciente
-data class PacienteP(
-    val nombre: String,
-    val tipo_test: String,
-    val fecha_test: Date,
-    val puntaje: Int,
-    val nivel_ansiedad: String
-)
-
 @Preview(showBackground = true)
 @Composable
 fun PendientesPreview() {
+    val viewModel = VigilanciaViewModel().apply {
+        realizarVigilancia()
+    }
     ProyectoSISVITATheme {
         MyApp {
-            PendientesContent(rememberNavController())
+            viewModel.realizarVigilancia()
+            PendientesContent(viewModel.diagnosticos,viewModel,rememberNavController())
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.proyecto_sisvita.registro.TestIsra.EspecialistaMenu
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -50,10 +51,11 @@ class MenuRevisar : ComponentActivity() {
 
 @Composable
 fun MenuRevisarScreen(navController: NavHostController = rememberNavController()) {
+    val context = LocalContext.current
     NavHost(navController = navController, startDestination = "menurevisar") {
         composable("menurevisar") { MenuRevisarContent(navController) }
         composable("pendientes") {
-            PendientesScreen()
+            context.startActivity(Intent(context, RealizarVigilancia::class.java))
         }
         composable("revisados") { RevisadosScreen() }
     }

@@ -32,6 +32,7 @@ import com.example.proyecto_sisvita.MyApp
 import com.example.proyecto_sisvita.R
 import com.example.proyecto_sisvita.registro.TestIsra.RegistroYPrimerTest.RegistroScreen
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
+import com.example.proyecto_sisvita.viewmodel.LoginViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +51,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     NavHost(navController = navController, startDestination = "main") {
         composable("main") { MainContent(navController) }
         composable("registro") { RegistroScreen() }
-        composable("login") { LoginScreen() }
+        composable("login") { LoginScreen(viewModel = LoginViewModel()) }
     }
 }
 @Composable
