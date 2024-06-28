@@ -1,6 +1,7 @@
 package com.example.proyecto_sisvita.registro.TestIsra.EspecialistaMenu
 
 //import android.icu.text.SimpleDateFormat
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -68,7 +69,7 @@ class RealizarVigilancia : ComponentActivity() {
 }
 
 @Composable
-fun PendientesScreen(listaDiagnosticos: ArrayList<Diagnostico>, viewModel: VigilanciaViewModel) {
+fun PendientesScreen(listaDiagnosticos: List<Diagnostico>, viewModel: VigilanciaViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "pendientes") {
         composable("pendientes") {
@@ -87,7 +88,7 @@ fun PendientesScreen(listaDiagnosticos: ArrayList<Diagnostico>, viewModel: Vigil
 }
 
 @Composable
-fun PendientesContent(listaDiagnosticos: ArrayList<Diagnostico>, viewModel: VigilanciaViewModel,navController: NavHostController) {
+fun PendientesContent(listaDiagnosticos: List<Diagnostico>, viewModel: VigilanciaViewModel,navController: NavHostController) {
     val context = LocalContext.current
     val dateFormat = SimpleDateFormat("dd/MM/yyyy")
 
@@ -103,7 +104,7 @@ fun PendientesContent(listaDiagnosticos: ArrayList<Diagnostico>, viewModel: Vigi
     val itemsPerPage = 2
     val totalPages = (listaDiagnosticos.size + itemsPerPage - 1) / itemsPerPage
     val currentPage = remember { mutableStateOf(0) }
-
+    println(listaDiagnosticos)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -149,7 +150,7 @@ fun PendientesContent(listaDiagnosticos: ArrayList<Diagnostico>, viewModel: Vigi
             modifier = Modifier.fillMaxWidth()
         ) {
             Button(onClick = {
-                navController.navigate("menuRevisar")
+                context.startActivity(Intent(context, MenuRevisar::class.java))
             }, colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFFC3F52) // Rojo claro
             )) {
@@ -208,6 +209,16 @@ fun getColorForAnxietyLevel(nivel_ansiedad: Int): Color {
         else -> Color(0xFF50ABCE) // Color por defecto
     }
 }
+fun AnsiedadTexto(nivel_ansiedad: Int): String{
+    return when (nivel_ansiedad) {
+        1 -> "Prueba Ansiedad" // Verde claro
+        2-> "Ansiedad marcada"// Verde limon
+        3 -> "Ansiedad moderada" // Amarillo
+        4 -> "Ansiead severa" // Naranja
+        5 -> "Ansiead extrema" // Rojo
+        else -> "Sin nivel" // Color por defecto
+    }
+}
 @Composable
 fun PendienteCard(diagnostico: Diagnostico, navigateToDiagnostico: () -> Unit) {
     Card(
@@ -231,11 +242,13 @@ fun PendienteCard(diagnostico: Diagnostico, navigateToDiagnostico: () -> Unit) {
                 Text("Test: ${diagnostico.tipo_test}", fontWeight = FontWeight.Normal)
                 Text("Fecha: ${diagnostico.fecha_test}", fontWeight = FontWeight.Normal)
                 Text("Puntaje: ${diagnostico.puntaje}", fontWeight = FontWeight.Normal)
-                Text("Nivel: ${diagnostico.id_nivel}", fontWeight = FontWeight.Normal)
+                Text("Nivel: ${AnsiedadTexto(diagnostico.id_nivel)}", fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
                     onClick = navigateToDiagnostico,
-                    shape = RoundedCornerShape(50)
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF9400FF) )// Rojo claro
                 ) {
                     Text("Evaluar")
                 }

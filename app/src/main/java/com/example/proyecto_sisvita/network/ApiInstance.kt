@@ -1,5 +1,6 @@
 package com.example.proyecto_sisvita.network
 
+import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
