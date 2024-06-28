@@ -109,7 +109,7 @@ fun MenuRevisarContent(navController: NavHostController) {
                 modifier = Modifier.padding(horizontal = 32.dp),
                 shape = RoundedCornerShape(50)
             ) {
-                Text("PENDIENTES")
+                Text("REALIZAR VIGILANCIA")
             }
             Spacer(modifier = Modifier.height(16.dp))
             Button(
