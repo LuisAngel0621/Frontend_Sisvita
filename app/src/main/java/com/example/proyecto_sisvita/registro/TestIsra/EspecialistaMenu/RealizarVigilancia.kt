@@ -78,11 +78,12 @@ fun PendientesScreen(listaDiagnosticos: List<Diagnostico>, viewModel: Vigilancia
         composable("menuRevisar") {
             MenuRevisar()
         }
-        composable(
-            "diagnostico/{nombre}"
-        ) { backStackEntry ->
+        composable("diagnostico/{nombre}") { backStackEntry ->
             val nombre = backStackEntry.arguments?.getString("nombre") ?: ""
             DiagnosticoScreen(nombre)
+        }
+        composable("verMapaCalor") {
+            VerMapaCalor()
         }
     }
 }
@@ -158,7 +159,7 @@ fun PendientesContent(listaDiagnosticos: List<Diagnostico>, viewModel: Vigilanci
             }
             Button(
                 onClick = {
-
+                    context.startActivity(Intent(context, VerMapaCalor::class.java))
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFFF5722) // Rojo claro
