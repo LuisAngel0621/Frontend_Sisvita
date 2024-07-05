@@ -8,7 +8,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,19 +25,25 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,7 +65,6 @@ import com.example.proyecto_sisvita.registro.TestIsra.EvaluarDiagnostico.Evaluar
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 import com.example.proyecto_sisvita.viewmodel.EvaluarViewModel
 import com.example.proyecto_sisvita.viewmodel.VigilanciaViewModel
-import java.text.SimpleDateFormat
 
 class RealizarVigilancia : ComponentActivity() {
     val viewModel by viewModels<VigilanciaViewModel>()
@@ -93,13 +100,13 @@ fun PendientesScreen(listaDiagnosticos: List<Diagnostico>, vigilanciaViewModel: 
     }
 }
 @Composable
-fun PendientesContent(listaDiagnosticos: List<Diagnostico>, viewModel: VigilanciaViewModel,navController: NavHostController) {
+fun PendientesContent(listaDiagnosticos: List<Diagnostico>, viewModel: VigilanciaViewModel, navController: NavHostController) {
     val context = LocalContext.current
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy")
     val itemsPerPage = 2
-    val totalPages = (listaDiagnosticos.size + itemsPerPage - 1) / itemsPerPage
     val currentPage = remember { mutableStateOf(0) }
-    println(listaDiagnosticos)
+    var selectedAnxietyLevel by remember { mutableStateOf<String?>(null) }
+    val anxietyLevels = listaDiagnosticos.map { it.tipo_nivel.nivel_ansiedad }.distinct()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -110,20 +117,38 @@ fun PendientesContent(listaDiagnosticos: List<Diagnostico>, viewModel: Vigilanci
             painter = painterResource(id = R.drawable.sisvita_logo),
             contentDescription = "Logo",
             modifier = Modifier
-                .padding(40.dp)
-                .size(80.dp)
+                .padding(16.dp)
+                .size(60.dp)
         )
         Text(
             text = "Realizar Vigilancia",
-            fontSize = 24.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF45ACCC)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CustomDropdownMenu(
+            value = selectedAnxietyLevel ?: "Selecciona un nivel de ansiedad",
+            onValueChange = { nivel ->
+                selectedAnxietyLevel = nivel
+                currentPage.value = 0 // Reiniciar a la primera página cuando se filtra
+            },
+            label = "Selecciona un nivel de ansiedad",
+            options = anxietyLevels
+        )
+
+        val filteredDiagnosticos = if (selectedAnxietyLevel != null) {
+            listaDiagnosticos.filter { it.tipo_nivel.nivel_ansiedad == selectedAnxietyLevel }
+        } else {
+            listaDiagnosticos
+        }
+
+        val totalPages = (filteredDiagnosticos.size + itemsPerPage - 1) / itemsPerPage
 
         val startIndex = currentPage.value * itemsPerPage
-        val endIndex = (startIndex + itemsPerPage).coerceAtMost(listaDiagnosticos.size)
-        val currentItems = listaDiagnosticos.subList(startIndex, endIndex)
+        val endIndex = (startIndex + itemsPerPage).coerceAtMost(filteredDiagnosticos.size)
+        val currentItems = filteredDiagnosticos.subList(startIndex, endIndex)
 
         LazyColumn {
             items(currentItems) { diagnostico ->
@@ -194,24 +219,25 @@ fun PaginationControls(currentPage: Int, totalPages: Int, onPageChange: (Int) ->
     }
 }
 
-fun getColorForAnxietyLevel(nivel_ansiedad: Int): Color {
+fun getColorForAnxietyLevel(nivel_ansiedad: String): Color {
     return when (nivel_ansiedad) {
-        1 -> Color(0xFF4CAF50) // Verde claro
-        2-> Color(0xFFDCEDC1) // Verde limon
-        3 -> Color(0xFFFFF176) // Amarillo
-        4 -> Color(0xFFFFAB40) // Naranja
-        5 -> Color(0xFFFF5252) // Rojo
+        "Ansiedad mínima" -> Color(0xFF4CAF50) // Verde claro
+        "Ansiedad marcada"-> Color(0xFFDCEDC1) // Verde limon
+        "Ansiedad moderada" -> Color(0xFFFFF176) // Amarillo
+        "Ansiedad severa" -> Color(0xFFFFAB40) // Naranja
+        "Ansiedad extrema" -> Color(0xFFFF5252) // Rojo
         else -> Color(0xFF50ABCE) // Color por defecto
     }
 }
-fun AnsiedadTexto(nivel_ansiedad: Int): String{
+
+fun getIconForAnxietyLevel(nivel_ansiedad: String): Int{
     return when (nivel_ansiedad) {
-        1 -> "Prueba Ansiedad" // Verde claro
-        2-> "Ansiedad marcada"// Verde limon
-        3 -> "Ansiedad moderada" // Amarillo
-        4 -> "Ansiead severa" // Naranja
-        5 -> "Ansiead extrema" // Rojo
-        else -> "Sin nivel" // Color por defecto
+        "Ansiedad mínima" -> R.drawable.minimo // Verde claro
+        "Ansiedad marcada"-> R.drawable.marcado  // Verde limon
+        "Ansiedad moderada" -> R.drawable.moderado  // Amarillo
+        "Ansiedad severa" -> R.drawable.severo  // Naranja
+        "Ansiedad extrema" -> R.drawable.extrema // Rojo
+        else -> R.drawable.especialista // Color por defecto
     }
 }
 @Composable
@@ -220,7 +246,7 @@ fun PendienteCard(diagnostico: Diagnostico, navigateToDiagnostico: () -> Unit) {
         modifier = Modifier
             .padding(8.dp)
             .background(Color.White, RoundedCornerShape(8.dp)),
-        colors = CardDefaults.cardColors(containerColor = getColorForAnxietyLevel(diagnostico.tipo_nivel.id_nivel)),
+        colors = CardDefaults.cardColors(containerColor = getColorForAnxietyLevel(diagnostico.tipo_nivel.nivel_ansiedad)),
         elevation = CardDefaults.elevatedCardElevation(20.dp)
     ) {
         Row(
@@ -236,7 +262,7 @@ fun PendienteCard(diagnostico: Diagnostico, navigateToDiagnostico: () -> Unit) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("Test: ${diagnostico.usuario_test.test.tipo_test.nombre}", fontWeight = FontWeight.Normal)
                 //falta la fecha
-                //Text("Puntaje: ${diagnostico.usuario_test.fecha_test}", fontWeight = FontWeight.Normal)
+                Text("Fecha: ${diagnostico.usuario_test.fecha_test}", fontWeight = FontWeight.Normal)
                 Text("Puntaje: ${diagnostico.puntaje}", fontWeight = FontWeight.Normal)
                 Text("Nivel: ${diagnostico.tipo_nivel.nivel_ansiedad}", fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -250,7 +276,7 @@ fun PendienteCard(diagnostico: Diagnostico, navigateToDiagnostico: () -> Unit) {
                 }
             }
             Image(
-                painter = painterResource(id = R.drawable.especialista),
+                painter = painterResource(id = getIconForAnxietyLevel(diagnostico.tipo_nivel.nivel_ansiedad)),
                 contentDescription = "Profile Image",
                 modifier = Modifier
                     .size(100.dp)
@@ -261,6 +287,65 @@ fun PendienteCard(diagnostico: Diagnostico, navigateToDiagnostico: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomDropdownMenu(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    options: List<String>
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp, horizontal = 30.dp)
+    ) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = !expanded }
+        ) {
+            OutlinedTextField(
+                value = value,
+                onValueChange = { },
+                label = { Text(label) },
+                readOnly = true,
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledBorderColor = Color.Gray,
+                    disabledTextColor = Color.DarkGray,
+                    disabledLabelColor = Color.DarkGray
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { expanded = !expanded },
+                enabled = false // Disable to prevent focus
+            )
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                options.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option) },
+                        onClick = {
+                            onValueChange(option)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun PendientesPreview() {
@@ -270,7 +355,7 @@ fun PendientesPreview() {
     ProyectoSISVITATheme {
         MyApp {
             viewModel.realizarVigilancia()
-            //PendientesContent(viewModel.diagnosticos,viewModel,rememberNavController())
+            PendientesContent(viewModel.diagnosticos,viewModel,rememberNavController())
         }
     }
 }

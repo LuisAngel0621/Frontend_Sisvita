@@ -1,7 +1,5 @@
 package com.example.proyecto_sisvita.data.model
 
-import java.sql.Time
-import java.time.format.DateTimeFormatter
 import java.util.Date
 
 data class UsuarioTest(
@@ -11,7 +9,7 @@ data class UsuarioTest(
     val respuesta: Int,
     val nropregunta: Int,
     val id_escala: Int,
-    //val fecha_test: String,
+    val fecha_test: Date,
     val test: Test,
     val usuario_tipo: UsuarioTipo
 )

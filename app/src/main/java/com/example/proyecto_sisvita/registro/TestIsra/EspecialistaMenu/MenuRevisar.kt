@@ -34,6 +34,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_sisvita.MyApp
 import com.example.proyecto_sisvita.R
+import com.example.proyecto_sisvita.registro.TestIsra.Login.LoginActivity
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 
 class MenuRevisar : ComponentActivity() {
@@ -123,7 +124,7 @@ fun MenuRevisarContent(navController: NavHostController) {
             }
             Spacer(modifier = Modifier.height(64.dp))
             Button(
-                onClick = { (context as? ComponentActivity)?.finish() },
+                onClick = { context.startActivity(Intent(context, LoginActivity::class.java))},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFFC3F52) // Rojo claro
                 ),
