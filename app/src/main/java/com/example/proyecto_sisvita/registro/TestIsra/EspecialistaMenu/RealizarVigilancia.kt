@@ -32,6 +32,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -51,56 +53,49 @@ import androidx.navigation.compose.rememberNavController
 import com.example.proyecto_sisvita.MyApp
 import com.example.proyecto_sisvita.R
 import com.example.proyecto_sisvita.data.model.Diagnostico
+import com.example.proyecto_sisvita.registro.TestIsra.EvaluarDiagnostico.EvaluarTestScreen
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
+import com.example.proyecto_sisvita.viewmodel.EvaluarViewModel
 import com.example.proyecto_sisvita.viewmodel.VigilanciaViewModel
 import java.text.SimpleDateFormat
 
 class RealizarVigilancia : ComponentActivity() {
     val viewModel by viewModels<VigilanciaViewModel>()
+    val vigilanciaViewModel by viewModels<VigilanciaViewModel>()
+    val evaluarViewModel by viewModels<EvaluarViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
+                println("hola")
                 viewModel.realizarVigilancia()
-                PendientesScreen(viewModel.diagnosticos,viewModel)
+                PendientesScreen(viewModel.diagnosticos,vigilanciaViewModel = vigilanciaViewModel, evaluarViewModel=evaluarViewModel)
             }
         }
     }
 }
-
 @Composable
-fun PendientesScreen(listaDiagnosticos: List<Diagnostico>, viewModel: VigilanciaViewModel) {
+fun PendientesScreen(listaDiagnosticos: List<Diagnostico>, vigilanciaViewModel: VigilanciaViewModel, evaluarViewModel: EvaluarViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "pendientes") {
         composable("pendientes") {
-            PendientesContent(listaDiagnosticos,viewModel,navController)
+            PendientesContent(listaDiagnosticos,vigilanciaViewModel,navController)
         }
         composable("menuRevisar") {
             MenuRevisar()
         }
-        composable(
-            "diagnostico/{nombre}"
-        ) { backStackEntry ->
-            val nombre = backStackEntry.arguments?.getString("nombre") ?: ""
-            DiagnosticoScreen(nombre)
+        composable("evaluar_test/{id}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")?.toInt() ?: 0
+            vigilanciaViewModel.realizarVigilanciaEspecifica(id)
+            println(vigilanciaViewModel.diagnostico)
+            EvaluarTestScreen(navBackStackEntry = backStackEntry,vigilanciaViewModel.diagnostico.value,evaluarViewModel = evaluarViewModel)
         }
     }
 }
-
 @Composable
 fun PendientesContent(listaDiagnosticos: List<Diagnostico>, viewModel: VigilanciaViewModel,navController: NavHostController) {
     val context = LocalContext.current
     val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-
-    /*val pacientes = listOf(
-        PacienteP("Andres Arriel Paladino", "ISRA", dateFormat.parse("24/10/2024"),30, "Ansiedad marcada"),
-        PacienteP("Jorge Manrico Condorcanqui", "HAS", dateFormat.parse("22/09/2024"),45, "Ansiedad moderada"),
-        PacienteP("Carlos Perez", "ISRA", dateFormat.parse("30/08/2024"),50, "Ansiedad moderada"),
-        PacienteP("Maria Lopez", "STAI", dateFormat.parse("24/07/2024"),10, "Prueba ansiedad"),
-        PacienteP("Ana Gomez", "STAI", dateFormat.parse("02/10/2024"),45, "Ansiedad moderada"),
-        PacienteP("Luis Rodriguez", "HAS", dateFormat.parse("03/11/2024"),30, "Ansiedad marcada"),
-        PacienteP("Eduardo Armado", "ISRA", dateFormat.parse("23/09/2024"),10, "Prueba ansiedad"),
-    )*/
     val itemsPerPage = 2
     val totalPages = (listaDiagnosticos.size + itemsPerPage - 1) / itemsPerPage
     val currentPage = remember { mutableStateOf(0) }
@@ -133,7 +128,7 @@ fun PendientesContent(listaDiagnosticos: List<Diagnostico>, viewModel: Vigilanci
         LazyColumn {
             items(currentItems) { diagnostico ->
                 PendienteCard(diagnostico) {
-                    navController.navigate("diagnostico/${diagnostico.nombres}")
+                    navController.navigate("evaluar_test/${diagnostico.id_diag}")
                 }
             }
         }
@@ -225,7 +220,7 @@ fun PendienteCard(diagnostico: Diagnostico, navigateToDiagnostico: () -> Unit) {
         modifier = Modifier
             .padding(8.dp)
             .background(Color.White, RoundedCornerShape(8.dp)),
-        colors = CardDefaults.cardColors(containerColor = getColorForAnxietyLevel(diagnostico.id_nivel)),
+        colors = CardDefaults.cardColors(containerColor = getColorForAnxietyLevel(diagnostico.tipo_nivel.id_nivel)),
         elevation = CardDefaults.elevatedCardElevation(20.dp)
     ) {
         Row(
@@ -237,12 +232,13 @@ fun PendienteCard(diagnostico: Diagnostico, navigateToDiagnostico: () -> Unit) {
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text("${diagnostico.nombres} ${diagnostico.apellidos}", fontWeight = FontWeight.Bold)
+                Text("${diagnostico.usuario_test.usuario_tipo.usuario.nombres} ${diagnostico.usuario_test.usuario_tipo.usuario.apellidos}", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("Test: ${diagnostico.tipo_test}", fontWeight = FontWeight.Normal)
-                Text("Fecha: ${diagnostico.fecha_test}", fontWeight = FontWeight.Normal)
+                Text("Test: ${diagnostico.usuario_test.test.tipo_test.nombre}", fontWeight = FontWeight.Normal)
+                //falta la fecha
+                //Text("Puntaje: ${diagnostico.usuario_test.fecha_test}", fontWeight = FontWeight.Normal)
                 Text("Puntaje: ${diagnostico.puntaje}", fontWeight = FontWeight.Normal)
-                Text("Nivel: ${AnsiedadTexto(diagnostico.id_nivel)}", fontWeight = FontWeight.Normal)
+                Text("Nivel: ${diagnostico.tipo_nivel.nivel_ansiedad}", fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
                     onClick = navigateToDiagnostico,
@@ -274,7 +270,7 @@ fun PendientesPreview() {
     ProyectoSISVITATheme {
         MyApp {
             viewModel.realizarVigilancia()
-            PendientesContent(viewModel.diagnosticos,viewModel,rememberNavController())
+            //PendientesContent(viewModel.diagnosticos,viewModel,rememberNavController())
         }
     }
 }

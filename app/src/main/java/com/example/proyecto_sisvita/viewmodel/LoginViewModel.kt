@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/*class LoginViewModel: ViewModel() {
+class LoginViewModel: ViewModel() {
     //lateinit var validacion: String
     lateinit var validacion: String
     fun inicioSesion(loginRequest: LoginRequest){
@@ -26,8 +26,8 @@ import kotlinx.coroutines.withContext
         }
 
     }
-}*/
-class LoginViewModel: ViewModel() {
+}
+/*class LoginViewModel: ViewModel() {
     var validacion by mutableStateOf(String())
 
     fun inicioSesion(loginRequest: LoginRequest){
@@ -50,4 +50,5 @@ class LoginViewModel: ViewModel() {
             }
         }
     }
-}
+
+} */

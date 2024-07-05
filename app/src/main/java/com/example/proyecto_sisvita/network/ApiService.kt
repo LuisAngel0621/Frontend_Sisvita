@@ -1,5 +1,7 @@
 package com.example.proyecto_sisvita.network
 
+import com.example.proyecto_sisvita.data.model.Diagnostico
+import com.example.proyecto_sisvita.data.model.DiagnosticoRes
 import com.example.proyecto_sisvita.data.model.DiagnosticoResponse
 import com.example.proyecto_sisvita.data.model.EscalaResponse
 import com.example.proyecto_sisvita.data.model.EvaluarTestRequest
@@ -56,6 +58,16 @@ interface ApiService {
     //CUS Realizar Vigilancia
     @GET("/RealizarVigilancia")
     suspend fun realizarvigilancia(): Response<DiagnosticoResponse>
+
+    @GET("/RealizarVigilancia/{id_diag}")
+    suspend fun realizarVigilanciaEspecifica(
+        @Path("id_diag")id_diag: Int,
+    ): Response<DiagnosticoRes>
+
+    @GET("/ObtenerNivel/{id_nivel}")
+    suspend fun obtenerNivelEspecifico(
+        @Path("id_nivel")id_diag: Int,
+    ): Response<NivelResponse>
 
     @GET("/ObtenerNivel")
     suspend fun obtenerNivel(): Response<NivelResponse>
