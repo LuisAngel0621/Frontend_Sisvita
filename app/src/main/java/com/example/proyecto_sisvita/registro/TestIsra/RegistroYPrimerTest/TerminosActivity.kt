@@ -24,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.R
 import com.example.proyecto_sisvita.data.model.Paciente
+import com.example.proyecto_sisvita.data.model.UsuarioTipo
+import com.example.proyecto_sisvita.network.GlobalState
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 import com.example.proyecto_sisvita.viewmodel.PacientesViewModel
 
@@ -73,15 +76,24 @@ class TerminosActivity() : ComponentActivity() {
 }
 
 @Composable
-fun TerminosScreen(nombres: String,apellidos: String,correo: String,edad: String,sexo: String,estadocivil: String,ocupacion: String, viewModel: PacientesViewModel) {
+fun TerminosScreen(nombres: String,
+                   apellidos: String,
+                   correo: String,
+                   edad: String,
+                   sexo: String,
+                   estadocivil: String,
+                   ocupacion: String,
+                   viewModel: PacientesViewModel) {
     val context = LocalContext.current
     val (aceptarTerminos, setAceptarTerminos) = remember { mutableStateOf(false) }
     val (aceptarNotificaciones, setAceptarNotificaciones) = remember { mutableStateOf(false) }
+    val isLoading by viewModel::isloading
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFB3E5FC)).padding(bottom = 100.dp) // Background color similar to the image
+            .background(Color(0xFFB3E5FC))
+            .padding(bottom = 100.dp) // Background color similar to the image
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -131,43 +143,67 @@ fun TerminosScreen(nombres: String,apellidos: String,correo: String,edad: String
         }
 
         Spacer(modifier = Modifier.height(40.dp))
+        if(isLoading){
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+        } else {
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Button(
-                onClick = { (context as? ComponentActivity)?.finish() },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFC3F52) // Rojo claro
-                )
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text("No acepto")
-            }
+                Button(
+                    onClick = { (context as? ComponentActivity)?.finish() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFC3F52) // Rojo claro
+                    )
+                ) {
+                    Text("No acepto")
+                }
 
-            Button(
-                onClick = {
-                    if (aceptarTerminos) {
-                        viewModel.addPaciente(
+                Button(
+                    onClick = {
+                        if (aceptarTerminos) {
+                            viewModel.addPaciente(
 
-                            Paciente(
-                                nombres = nombres,
-                                apellidos = apellidos,
-                                correoinstitucional = correo,
-                                edad = edad.toInt(),
-                                sexo = sexo,
-                                estadocivil = estadocivil,
-                                ocupacion = ocupacion
-                            )
-                        )
-                        context.startActivity(Intent(context, IniciarTestActivity::class.java))
-                    }
-                },
-                enabled = aceptarTerminos
-            ) {
-                Text("Confirmar")
+                                Paciente(
+                                    nombres = nombres,
+                                    apellidos = apellidos,
+                                    correoinstitucional = correo,
+                                    edad = edad.toInt(),
+                                    sexo = sexo,
+                                    estadocivil = estadocivil,
+                                    ocupacion = ocupacion
+                                )
+                            ){
+                                    id ->
+                                GlobalState.id_user = id
+                                viewModel.addContrasenia(
+                                    UsuarioTipo(
+                                        id_tipo = 1,
+                                        id_usu = id,
+                                        sesion = true,
+                                        condiciones = true,
+                                        terminos = true,
+                                        usuario = Paciente()
+                                    )
+                                ){
+                                        id_tipo ->
+                                    GlobalState.id_tipo = id_tipo
+                                }
+                                context.startActivity(Intent(context, IniciarTestActivity::class.java))
+                            }
+
+
+                        }
+
+                    },
+                    enabled = aceptarTerminos
+                ) {
+                    Text("Confirmar")
+                }
             }
         }
+
     }
 }
 

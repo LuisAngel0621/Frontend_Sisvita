@@ -147,6 +147,7 @@ fun TerminosScreen(nombres: String,apellidos: String,correo: String,edad: String
 
             Button(
                 onClick = {
+                    /*
                     if (aceptarTerminos) {
 
                         viewModel.addPaciente(
@@ -162,7 +163,7 @@ fun TerminosScreen(nombres: String,apellidos: String,correo: String,edad: String
                             )
                         )
                         context.startActivity(Intent(context, IniciarTestActivity::class.java))
-                    }
+                    }*/
                 },
                 enabled = aceptarTerminos
             ) {

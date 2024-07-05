@@ -4,6 +4,7 @@ package com.example.proyecto_sisvita.registro.TestIsra.Login
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,23 +36,24 @@ import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 import com.example.proyecto_sisvita.viewmodel.LoginViewModel
 
 class MainActivity : ComponentActivity() {
+    val viewModel by viewModels<LoginViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ProyectoSISVITATheme {
                 MyApp {
-                    MainScreen()
+                    MainScreen(viewModel = viewModel)
                 }
             }
         }
     }
 }
 @Composable
-fun MainScreen(navController: NavHostController = rememberNavController()) {
+fun MainScreen(navController: NavHostController = rememberNavController(), viewModel: LoginViewModel) {
     NavHost(navController = navController, startDestination = "main") {
         composable("main") { MainContent(navController) }
         composable("registro") { RegistroScreen() }
-        composable("login") { LoginScreen(viewModel = LoginViewModel()) }
+        composable("login") { LoginScreen(viewModel) }
     }
 }
 @Composable
@@ -113,7 +115,7 @@ fun MainContent(navController: NavHostController) {
 fun DefaultPreview() {
     ProyectoSISVITATheme {
         MyApp {
-            MainScreen()
+            MainScreen(viewModel = LoginViewModel())
         }
     }
 }

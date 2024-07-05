@@ -4,3 +4,4 @@ data class Escala(
     val id_escala: Int,
     val descripcion: String
 )
+

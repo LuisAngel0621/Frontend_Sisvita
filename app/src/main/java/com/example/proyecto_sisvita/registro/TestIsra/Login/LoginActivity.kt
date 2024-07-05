@@ -99,13 +99,16 @@ fun LoginScreen(viewModel: LoginViewModel) {
 
         Button(
             onClick = {
-                //viewModel.inicioSesion(LoginRequest(correoinstitucional = username.value,contraseña = password.value))
-                //println(viewModel.validacion)
-                //if (viewModel.validacion == "success"){
-                context.startActivity(Intent(context, MenuRevisar::class.java))
-               // }else{
-                   // println("No se pudo iniciar sesion")
-               // }
+                viewModel.inicioSesion(
+                    LoginRequest(
+                        correoinstitucional = username.value,
+                        contraseña = password.value)
+                ){
+                    validacion ->
+                    if(validacion == "success"){
+                        context.startActivity(Intent(context, MenuRevisar::class.java))
+                    }
+                }
             },
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
         ) {

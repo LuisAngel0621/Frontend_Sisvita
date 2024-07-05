@@ -15,9 +15,12 @@ import com.example.proyecto_sisvita.data.model.Paciente
 import com.example.proyecto_sisvita.data.model.PacienteResponse
 import com.example.proyecto_sisvita.data.model.PreguntaResponse
 import com.example.proyecto_sisvita.data.model.RespuestaResponse
+import com.example.proyecto_sisvita.data.model.SumaPuntaje
 import com.example.proyecto_sisvita.data.model.UbigeoResponse
 import com.example.proyecto_sisvita.data.model.UsuarioTest
 import com.example.proyecto_sisvita.data.model.UsuarioTestResponse
+import com.example.proyecto_sisvita.data.model.UsuarioTipo
+import com.example.proyecto_sisvita.data.model.UsuarioTipoResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -40,6 +43,11 @@ interface ApiService {
         @Body paciente: Paciente
     ): Response<PacienteResponse>
 
+    @POST("/EnviarContrasenia")
+    suspend fun enviarcontrasenia(
+        @Body usuarioTipo: UsuarioTipo
+    ): Response<UsuarioTipoResponse>
+
     //CUS Realizar Test
     @POST("/RealizarTest")
     suspend fun respuestaspacienteApiService(
@@ -54,6 +62,16 @@ interface ApiService {
 
     @GET("/ObtenerEscala")
     suspend fun obtenerEscala(): Response<EscalaResponse>
+
+    @GET("/SumaPuntaje/{id_paciente}")
+    suspend fun sumapuntaje(
+        @Path("id_paciente") id_paciente: Int,
+    ): Response<SumaPuntaje>
+
+    @POST("/ResultadoTest")
+    suspend fun diagnosticoprevio(
+        @Body diagnostico: Diagnostico
+    ): Response<DiagnosticoRes>
 
     //CUS Realizar Vigilancia
     @GET("/RealizarVigilancia")
