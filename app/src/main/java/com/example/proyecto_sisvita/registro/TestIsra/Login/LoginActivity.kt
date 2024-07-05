@@ -21,6 +21,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.R
 import com.example.proyecto_sisvita.data.model.LoginRequest
+import com.example.proyecto_sisvita.network.GlobalState
 import com.example.proyecto_sisvita.registro.TestIsra.EspecialistaMenu.MenuRevisar
 import com.example.proyecto_sisvita.registro.TestIsra.TestApi.VistaDatos
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
@@ -57,6 +60,8 @@ fun LoginScreen(viewModel: LoginViewModel) {
     val context = LocalContext.current
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val usernameRec by viewModel.username.collectAsState()
+    val passwordRec by viewModel.password.collectAsState()
 
     Column(
         modifier = Modifier
@@ -78,8 +83,8 @@ fun LoginScreen(viewModel: LoginViewModel) {
         )
 
         OutlinedTextField(
-            value = username.value,
-            onValueChange = { username.value = it },
+            value = usernameRec,
+            onValueChange = { viewModel.onUsernameChange(it)},
             label = { Text("Username") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -87,8 +92,8 @@ fun LoginScreen(viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
-            value = password.value,
-            onValueChange = { password.value = it },
+            value = passwordRec,
+            onValueChange = { viewModel.onPasswordChange(it) },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -101,11 +106,14 @@ fun LoginScreen(viewModel: LoginViewModel) {
             onClick = {
                 viewModel.inicioSesion(
                     LoginRequest(
-                        correoinstitucional = username.value,
-                        contraseña = password.value)
+                        correoinstitucional = usernameRec,
+                        contraseña = passwordRec)
                 ){
                     validacion ->
                     if(validacion == "success"){
+                        GlobalState.id_usutip = viewModel.idUsuario?.value!!
+                        GlobalState.username = usernameRec
+                        GlobalState.password = passwordRec
                         context.startActivity(Intent(context, MenuRevisar::class.java))
                     }
                 }

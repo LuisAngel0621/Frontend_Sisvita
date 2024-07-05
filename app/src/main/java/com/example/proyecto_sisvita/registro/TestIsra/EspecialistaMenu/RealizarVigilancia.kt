@@ -64,25 +64,26 @@ import com.example.proyecto_sisvita.data.model.Diagnostico
 import com.example.proyecto_sisvita.registro.TestIsra.EvaluarDiagnostico.EvaluarTestScreen
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
 import com.example.proyecto_sisvita.viewmodel.EvaluarViewModel
+import com.example.proyecto_sisvita.viewmodel.LoginViewModel
 import com.example.proyecto_sisvita.viewmodel.VigilanciaViewModel
 
 class RealizarVigilancia : ComponentActivity() {
     val viewModel by viewModels<VigilanciaViewModel>()
     val vigilanciaViewModel by viewModels<VigilanciaViewModel>()
     val evaluarViewModel by viewModels<EvaluarViewModel>()
+    val loginViewModel by viewModels<LoginViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                println("hola")
                 viewModel.realizarVigilancia()
-                PendientesScreen(viewModel.diagnosticos,vigilanciaViewModel = vigilanciaViewModel, evaluarViewModel=evaluarViewModel)
+                PendientesScreen(viewModel.diagnosticos,vigilanciaViewModel = vigilanciaViewModel, evaluarViewModel=evaluarViewModel,loginViewModel=loginViewModel)
             }
         }
     }
 }
 @Composable
-fun PendientesScreen(listaDiagnosticos: List<Diagnostico>, vigilanciaViewModel: VigilanciaViewModel, evaluarViewModel: EvaluarViewModel) {
+fun PendientesScreen(listaDiagnosticos: List<Diagnostico>, vigilanciaViewModel: VigilanciaViewModel, evaluarViewModel: EvaluarViewModel,loginViewModel: LoginViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "pendientes") {
         composable("pendientes") {
@@ -93,9 +94,14 @@ fun PendientesScreen(listaDiagnosticos: List<Diagnostico>, vigilanciaViewModel: 
         }
         composable("evaluar_test/{id}") { backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")?.toInt() ?: 0
-            vigilanciaViewModel.realizarVigilanciaEspecifica(id)
-            println(vigilanciaViewModel.diagnostico)
-            EvaluarTestScreen(navBackStackEntry = backStackEntry,vigilanciaViewModel.diagnostico.value,evaluarViewModel = evaluarViewModel)
+            EvaluarTestScreen(
+                navController = navController,
+                navBackStackEntry = backStackEntry,
+                vigilanciaViewModel = vigilanciaViewModel,
+                evaluarViewModel = evaluarViewModel,
+                loginViewModel = loginViewModel,
+                id = id
+            )
         }
     }
 }

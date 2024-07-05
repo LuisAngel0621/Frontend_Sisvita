@@ -22,7 +22,6 @@ class VigilanciaViewModel: ViewModel() {
     init {
         realizarVigilancia()
     }
-
     fun realizarVigilancia() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -30,7 +29,6 @@ class VigilanciaViewModel: ViewModel() {
                 if (response.isSuccessful && response.body()?.success == true) {
                     val receivedDiagnosticos = response.body()?.data ?: emptyList()
                     diagnosticos.clear()
-                    println(receivedDiagnosticos)
                     diagnosticos.addAll(receivedDiagnosticos)
                 } else {
                     // Manejar error de respuesta
