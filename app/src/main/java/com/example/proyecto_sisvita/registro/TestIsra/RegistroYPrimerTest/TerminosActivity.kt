@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_sisvita.R
 import com.example.proyecto_sisvita.data.model.Paciente
+import com.example.proyecto_sisvita.data.model.Ubigeo
 import com.example.proyecto_sisvita.data.model.UsuarioTipo
 import com.example.proyecto_sisvita.network.GlobalState
 import com.example.proyecto_sisvita.ui.theme.ProyectoSISVITATheme
@@ -172,7 +173,8 @@ fun TerminosScreen(nombres: String,
                                     edad = edad.toInt(),
                                     sexo = sexo,
                                     estadocivil = estadocivil,
-                                    ocupacion = ocupacion
+                                    ocupacion = ocupacion,
+                                    ubigeo = Ubigeo()
                                 )
                             ){
                                     id ->
@@ -184,7 +186,7 @@ fun TerminosScreen(nombres: String,
                                         sesion = true,
                                         condiciones = true,
                                         terminos = true,
-                                        usuario = Paciente()
+                                        usuario = Paciente(ubigeo = Ubigeo())
                                     )
                                 ){
                                         id_tipo ->

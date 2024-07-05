@@ -5,7 +5,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialog
@@ -18,11 +26,15 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -39,6 +51,7 @@ import com.example.proyecto_sisvita.data.model.Pregunta
 import com.example.proyecto_sisvita.data.model.Respuesta
 import com.example.proyecto_sisvita.data.model.Test
 import com.example.proyecto_sisvita.data.model.TipoTest
+import com.example.proyecto_sisvita.data.model.Ubigeo
 import com.example.proyecto_sisvita.data.model.UsuarioTest
 import com.example.proyecto_sisvita.data.model.UsuarioTipo
 import com.example.proyecto_sisvita.network.GlobalState
@@ -48,41 +61,40 @@ import com.example.proyecto_sisvita.viewmodel.LoginViewModel
 import com.example.proyecto_sisvita.viewmodel.PreguntasTestViewModel
 import com.example.proyecto_sisvita.viewmodel.RespuestasTestViewModel
 import com.example.proyecto_sisvita.viewmodel.TestViewModel
-import kotlinx.coroutines.delay
 
 class InicioCognitivo: ComponentActivity() {
 
-val viewModelPre by viewModels<PreguntasTestViewModel>()
-val viewModelRes by viewModels<RespuestasTestViewModel>()
-val viewModel by viewModels<TestViewModel>()
-val viewModelLogin by viewModels<LoginViewModel>()
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContent {
-        ProyectoSISVITATheme{
-            Surface (
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ){
-                Box(
-                    modifier = Modifier.fillMaxSize()
+    val viewModelPre by viewModels<PreguntasTestViewModel>()
+    val viewModelRes by viewModels<RespuestasTestViewModel>()
+    val viewModel by viewModels<TestViewModel>()
+    val viewModelLogin by viewModels<LoginViewModel>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            ProyectoSISVITATheme{
+                Surface (
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ){
-                    viewModelPre.getPreguntas()
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ){
+                        viewModelPre.getPreguntas()
 
-                    viewModelRes.getRespuestas()
-                    viewModelRes.getEscala()
-                    AppNavigation(
-                        listapreguntas = viewModelPre.listapreg,
-                        listarespuestas = viewModelRes.listaresp,
-                        listaescala = viewModelRes.listaEscala,
-                        viewModel = viewModel,
-                        viewModelLogin = viewModelLogin
-                    )
+                        viewModelRes.getRespuestas()
+                        viewModelRes.getEscala()
+                        AppNavigation(
+                            listapreguntas = viewModelPre.listapreg,
+                            listarespuestas = viewModelRes.listaresp,
+                            listaescala = viewModelRes.listaEscala,
+                            viewModel = viewModel,
+                            viewModelLogin = viewModelLogin
+                        )
+                    }
                 }
             }
         }
     }
-}
 }
 @Composable
 fun AppNavigation(
@@ -266,7 +278,7 @@ fun MostrarPreguntasConRespuestas(
                         id_paciente = GlobalState.id_tipo,
                         answers = selectedanwers.toList(),
                         test = Test(id_categoria=Categoria(),tipo_test= TipoTest()),
-                        usuario_tipo = UsuarioTipo(usuario= Paciente())
+                        usuario_tipo = UsuarioTipo(usuario= Paciente(ubigeo = Ubigeo()))
                     )
                 ){
                         id_user_test ->
@@ -422,7 +434,7 @@ fun Mostrar_test_Fisiologico(
                         id_paciente = GlobalState.id_tipo,
                         answers = selectedanwers.toList(),
                         test = Test(id_categoria=Categoria(),tipo_test= TipoTest()),
-                        usuario_tipo = UsuarioTipo(usuario= Paciente())
+                        usuario_tipo = UsuarioTipo(usuario= Paciente(ubigeo = Ubigeo()))
                     )
                 ){
                         id_user_test ->
@@ -571,7 +583,7 @@ fun Mostrar_test_Motor(
                         id_paciente = GlobalState.id_tipo,
                         answers = selectedanwers.toList(),
                         test = Test(id_categoria=Categoria(),tipo_test= TipoTest()),
-                        usuario_tipo = UsuarioTipo(usuario= Paciente())
+                        usuario_tipo = UsuarioTipo(usuario= Paciente(ubigeo = Ubigeo()))
                     )
                 ){
                         id_user_test ->
@@ -595,7 +607,7 @@ fun Mostrar_test_Motor(
                                         comentario = "",
                                         recomendacion = "",
                                         tipo_nivel = Nivel(),
-                                        usuario_test = UsuarioTest(test = Test(id_categoria=Categoria(),tipo_test= TipoTest()),usuario_tipo = UsuarioTipo(usuario= Paciente()))
+                                        usuario_test = UsuarioTest(test = Test(id_categoria=Categoria(),tipo_test= TipoTest()),usuario_tipo = UsuarioTipo(usuario= Paciente(ubigeo = Ubigeo())))
                                     )
                                 ){
                                         id_diag ->

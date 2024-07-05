@@ -8,6 +8,7 @@ data class Paciente (
     val edad: Int =0,
     val sexo: String ="",
     val estadocivil: String ="",
-    val ocupacion: String =""
+    val ocupacion: String ="",
+    val ubigeo: Ubigeo
 )
 
